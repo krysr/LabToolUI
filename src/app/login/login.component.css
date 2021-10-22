@@ -1,0 +1,31 @@
+.fa-eye-slash:hover,
+.fa-eye:hover {
+  cursor: pointer;
+}
+html,body {
+  height:100%;
+  width:100%;
+  margin:0;
+}
+body {
+  display:flex;
+}
+
+/*.field-icon {*/
+/*  !*float: right;*!*/
+/*  !*margin-left: -25px;*!*/
+/*  !*margin-top: -25px;*!*/
+/*  position: absolute;*/
+/*  !*z-index: 2;*!*/
+/*  top: calc(70% - 0.5em);*/
+/*  padding-left: 0;*/
+/*}*/
+
+.container{
+  /*padding-top:50px;*/
+  margin: auto;
+}
+
+.input-group {
+  position: relative;
+}
