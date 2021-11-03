@@ -2,14 +2,14 @@
 .fa-eye:hover {
   cursor: pointer;
 }
-html,body {
-  height:100%;
-  width:100%;
-  margin:0;
-}
-body {
-  display:flex;
-}
+/*html,body {*/
+/*  height:100%;*/
+/*  width:100%;*/
+/*  margin:0;*/
+/*}*/
+/*body {*/
+/*  display:flex;*/
+/*}*/
 
 /*.field-icon {*/
 /*  !*float: right;*!*/
@@ -21,11 +21,35 @@ body {
 /*  padding-left: 0;*/
 /*}*/
 
-.container{
-  /*padding-top:50px;*/
-  margin: auto;
+/*.container{*/
+/*  !*padding-top:50px;*!*/
+/*  margin: auto;*/
+/*}*/
+
+.container {
+  margin-left: 30%;
+  margin-right: 30%;
+  margin-top: 5%;
 }
+
+.card-body {
+  padding-left: 30%;
+}
+
 
 .input-group {
   position: relative;
+}
+
+.pw-container {
+  /*display: inline-block;*/
+  position: relative;
+}
+
+.field-icon {
+  position: absolute;
+  top: 20%;
+  /*right: -15px;*/
+  /*transition: right 0.2s;*/
+  margin-left:-5%;
 }

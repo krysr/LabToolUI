@@ -18,18 +18,29 @@
 /*  width: 100%;*/
 /*  position: absolute !important;*/
 /*}*/
-/*@import url("https://fonts.googleapis.com/css?family=Poppins:400,500i&display=swap");*/
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500i&display=swap");
 
-/*body:not(.fas),*/
-/*body:not(.fa) {*/
-/*  font-family: "Poppins", sans-serif;*/
+body:not(.fas),
+body:not(.fa) {
+  font-family: "Poppins", sans-serif;
+}
+
+/*html,body {*/
+/*  height:100%;*/
+/*  width:100%;*/
+/*  margin:0;*/
+/*}*/
+/*body {*/
+/*  display:flex;*/
 /*}*/
 
-html,body {
-  height:100%;
-  width:100%;
-  margin:0;
-}
-body {
-  display:flex;
-}
+/*body { margin: 2em; }*/
+/*body, input[text], button { color: #888; font-family: Cambria, Georgia; }*/
+/*button { padding: 0.2em; font-size: 14px}*/
+/** { font-family: Arial; }*/
+
+/*.background {*/
+/*  margin-left: 30%;*/
+/*  margin-right: 30%;*/
+/*  margin-top: 10%;*/
+/*}*/

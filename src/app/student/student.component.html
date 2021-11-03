@@ -1,17 +1,20 @@
 <div class ="container">
   <div class = "card">
-    <h3 class="text-center"> Student List</h3>
+    <h3 class="text-center"> Hello, {{firstName}} </h3>
     <div class = "card-body">
-      <table class="table table-striped">
-        <thead>
-        <th> Email </th>
-        </thead>
-        <tbody>
-        <tr *ngFor = "let student of students">
-          <td> {{ student.email}}</td>
-        </tr>
-        </tbody>
-      </table>
+<!--      <table class="table table-striped">-->
+<!--        <thead>-->
+<!--        <th> Hello! </th>-->
+<!--        </thead>-->
+<!--&lt;!&ndash;        <tbody>&ndash;&gt;-->
+<!--&lt;!&ndash;        <tr *ngFor = "let student of students">&ndash;&gt;-->
+<!--&lt;!&ndash;          <td> {{ student.firstName}}</td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tbody>&ndash;&gt;-->
+<!--      </table>-->
     </div>
   </div>
 </div>
+<app-lab></app-lab>
+
+<router-outlet></router-outlet>
