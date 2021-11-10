@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentService } from './student.service'
 import { Student } from './student'
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-student',
@@ -9,15 +10,14 @@ import { Student } from './student'
 })
 export class StudentComponent implements OnInit {
 
-  students: Student[];
   firstName: string;
-  constructor(private studentService: StudentService) { }
+  isDemonstrator: boolean;
+  constructor(private studentService: StudentService, private router: Router) { }
 
   ngOnInit(): void {
-    this.studentService.getStudents().subscribe((data) => {
-      console.log(data);
+    this.studentService.getStudent().subscribe((data) => {
       this.firstName = data.firstName;
-      //this.students = data;
+      this.isDemonstrator = data.role.toLowerCase() === 'demonstrator';
     });
   }
 }

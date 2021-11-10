@@ -1,7 +1,7 @@
 /* Style the header with a grey background and some padding */
 .header {
   overflow: hidden;
-  background-color: #ddd;
+  background-color: white;
   padding: 20px 10px;
 }
 
@@ -44,9 +44,12 @@
 }
 
 .header-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  text-align: left;
+  font-size: 3em;
+  margin-left: 3%;
 }
 
 /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */

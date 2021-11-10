@@ -24,7 +24,6 @@ export class LoginComponent implements OnInit {
   allowAccess: boolean;
   loginForm: FormGroup;
   submitted = false;
-  isSet = false;
   showErrorMsg: boolean;
   role: string;
 
@@ -39,6 +38,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {
+    localStorage.clear();
     this.isLoading = false;
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.login.dsUsername = this.loginForm.controls.username.value;
     this.login.password = this.loginForm.controls.password.value;
-    console.log("username: " + this.login.dsUsername);
     // this.signIn();
     //  this.loginService.findLogin(this.login).subscribe(data => {
     //    //this.login.dsUsername = JSON.stringify(data);
@@ -71,6 +70,7 @@ export class LoginComponent implements OnInit {
       if (data !== null) {
         localStorage.setItem('loggedIn', 'true');
         localStorage.setItem('username', data.dsUsername);
+        localStorage.setItem('role', data.role);
         if (data.role === 'lecturer') {
           this.router.navigate(["/admin"]);
         } else {

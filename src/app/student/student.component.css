@@ -1,0 +1,17 @@
+/*body, html {*/
+/*  background-color: #4ca1af;*/
+/*}*/
+.container {
+  background-color: #151526;
+  color: white;
+  text-align: center;
+  margin:0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: "Poppins", sans-serif;
+  font-size: 30px;
+}
+
+.demonstrator-btn {
+  float:right;
+}

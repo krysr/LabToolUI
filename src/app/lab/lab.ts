@@ -6,7 +6,7 @@ export class Lab {
   startTime: number;
   endTime: number;
   labClass: Class;
-  // personlabs: PersonLab
+  // personlabs: Demo
 }
 
 export class Class {
@@ -22,8 +22,8 @@ export class Grade {
   lab: Lab;
 }
 
-export class PersonLab {
-    labUserId: number;
+export class Demo {
+    demoId: number;
     demo: boolean;
     position: number;
     lab: Lab;

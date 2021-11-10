@@ -1,83 +1,110 @@
-<!--<h2>Login</h2>-->
-<!--<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">-->
-<!--  <div>-->
-<!--    <label for="username">-->
-<!--      Username-->
-<!--    </label>-->
-<!--    <input id="username" type="text" formControlName="username">-->
-<!--  </div>-->
-
-<!--  <div class="input-group-append">-->
-<!--    <label for="password">-->
-<!--      Password-->
-<!--    </label>-->
-<!--    <input id="password" type="password" formControlName="password">-->
-<!--      <span class="input-group-text">-->
-<!--        <i class="fa fa-eye-slash"></i>-->
-<!--      </span>-->
-<!--    </div>-->
-
 <!--  <button class="button" type="submit" (click)="signIn('home')">Login</button>-->
 
 <!--</form>-->
 <!--<h1 *ngIf="isSet">{{ login.dsUsername }}</h1>-->
 <!--<router-outlet></router-outlet>-->
 
-<div class="container">
-  <div class="row">
-    <div class="col-12 col-md-8 offset-md-2">
-      <div class="card">
-        <div class="card-body">
-          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mx-auto">
+<!--<div class="container">-->
+<!--  <div class="row">-->
+<!--    <div class="col-12 col-md-8 offset-md-2">-->
+<!--      <div class="card">-->
+<!--          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="mx-auto">-->
 
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <div class="form-group">
-                      <label for="username">DS Username</label>
-                      <div class="input-group">
-                        <input
-                          type="text"
-                          id="username"
-                          class="form-control"
-                          formControlName="username"
-                        />
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label>Password</label>
-                      <div class="pw-container">
-                      <div class="input-group">
-                        <!-- Change input type to be able to accept dynamic data -->
-                        <input
-                          [type]="fieldTextType ? 'text' : 'password'"
-                          class="form-control"
-                          formControlName="password"
-                        />
-<!--                    <i-->
+<!--                <div class="input-group-append">-->
+<!--                  <div class="input-group-text">-->
+<!--                    <div class="form-group">-->
+<!--                      <label for="username">DS Username</label>-->
+<!--                      <div class="input-group">-->
+<!--                        <input-->
+<!--                          type="text"-->
+<!--                          id="username"-->
+<!--                          class="form-control"-->
+<!--                          formControlName="username"-->
+<!--                        />-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="form-group">-->
+<!--                      <label>Password</label>-->
+<!--                      <div class="pw-container">-->
+<!--                      <div class="input-group">-->
+<!--                        &lt;!&ndash; Change input type to be able to accept dynamic data &ndash;&gt;-->
+<!--                        <input-->
+<!--                          [type]="fieldTextType ? 'text' : 'password'"-->
+<!--                          class="form-control"-->
+<!--                          formControlName="password"-->
+<!--                        />-->
+<!--&lt;!&ndash;                    <i&ndash;&gt;-->
 
-                    <span  class="fa fa-fw field-icon toggle-password"
-                      [ngClass]="{
+<!--                    <span  class="fa fa-fw field-icon toggle-password"-->
+<!--                      [ngClass]="{-->
+<!--                        'fa-eye-slash': !fieldTextType,-->
+<!--                        'fa-eye': fieldTextType-->
+<!--                      }"-->
+<!--                      (click)="toggleFieldTextType() "></span>-->
+<!--                      </div>-->
+<!--&lt;!&ndash;                    ></i>&ndash;&gt;-->
+<!--                  </div>-->
+<!--&lt;!&ndash;                  </span>&ndash;&gt;-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--            <div class="errorMsg" *ngIf="showErrorMsg">-->
+<!--              <h1>Wrong username or password!</h1>-->
+<!--            </div>-->
+<!--            <button class="button" type="submit">Login</button>-->
+<!--&lt;!&ndash;            <button class="button" type="submit" (click)="signIn('/home')">Login</button>&ndash;&gt;-->
+<!--          </form>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<body>
+
+<div class="limiter">
+  <div class="container-login100">
+    <!--    style="background-image: url('images/bg-01.jpg');">-->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+      <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+					<span class="form-title p-b-49">
+						Login
+					</span>
+
+          <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+            <span class="label-input100">Username</span>
+            <input class="input100" id="username" type="text" formControlName="username"
+                   placeholder="Type your username">
+            <span class="focus-input100"></span>
+          </div>
+
+          <div class="wrap-input100 validate-input" data-validate="Password is required">
+
+              <span class="label-input100">Password</span>
+            <div class="password-box">
+              <input class="input100" id="password" type="password"
+                     [type]="fieldTextType ? 'text' : 'password'"
+                     formControlName="password" placeholder="Type your password"/>
+            <span  class="fa fa-fw field-icon toggle-password"
+                   [ngClass]="{
                         'fa-eye-slash': !fieldTextType,
                         'fa-eye': fieldTextType
                       }"
-                      (click)="toggleFieldTextType() "></span>
-                      </div>
-<!--                    ></i>-->
-                  </div>
-<!--                  </span>-->
-                </div>
-              </div>
+                   (click)="toggleFieldTextType() "></span>
+          </div>
+          </div>
+          <div class="container-login100-form-btn">
+            <div class="wrap-login100-form-btn">
+              <div class="login100-form-bgbtn"></div>
+              <button class="login100-form-btn">
+                LOGIN
+              </button>
             </div>
-            <div class="errorMsg" *ngIf="showErrorMsg">
-              <h1>Wrong username or password!</h1>
-            </div>
-            <button class="button" type="submit">Login</button>
-<!--            <button class="button" type="submit" (click)="signIn('/home')">Login</button>-->
-          </form>
-        </div>
+          </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>
+
+</body>
+<!--</html>-->
 <router-outlet></router-outlet>
 

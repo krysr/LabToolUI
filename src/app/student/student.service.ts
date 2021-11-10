@@ -12,7 +12,7 @@ export class StudentService {
   test: string = "test";
   constructor(private http: HttpClient) { }
 
-  getStudents(): Observable<Student>{
+  getStudent(): Observable<Student>{
     let params = new HttpParams();
 
     const myHeaders = { headers: new HttpHeaders( { 'Access-Control-Allow-Origin': 'http://localhost:4200',

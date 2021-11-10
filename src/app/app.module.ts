@@ -19,6 +19,13 @@ import { HomeComponent } from './home/home.component';
 import { LabComponent } from './lab/lab.component';
 import { DemonstratorComponent } from './demonstrator/demonstrator.component';
 import {MatTableModule} from "@angular/material/table";
+import {MatSidenavModule} from "@angular/material/sidenav";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { GradeComponent } from './grade/grade.component';
+import {MDBBootstrapModule} from "angular-bootstrap-md";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
+import {MatInputModule} from "@angular/material/input";
 
 
 
@@ -40,9 +47,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   // { path: 'main', component: AppComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'header', component: HeaderComponent },
   { path: 'student', component: StudentComponent },
-  { path: 'demonstrator', component: DemonstratorComponent }
+  { path: 'admin', component: DemonstratorComponent },
+  { path: 'grade', component: GradeComponent }
 ];
 
 @NgModule({
@@ -56,22 +63,32 @@ const routes: Routes = [
     HomeComponent,
     StudentComponent,
     LabComponent,
-    DemonstratorComponent
+    DemonstratorComponent,
+    GradeComponent
   ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        MatIconModule,
-        MatButtonModule,
-        MatDividerModule,
-        FormsModule,
-        ReactiveFormsModule,
-        // AppRoutingModule,
-        NgbModule,
-        MatProgressSpinnerModule,
-        RouterModule.forRoot(routes),
-        MatTableModule
-    ],
+  entryComponents: [
+    GradeComponent
+  ],
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDividerModule,
+    FormsModule,
+    ReactiveFormsModule,
+    // AppRoutingModule,
+    NgbModule,
+    MatProgressSpinnerModule,
+    RouterModule.forRoot(routes),
+    MatTableModule,
+    MatSidenavModule,
+    BrowserAnimationsModule,
+    MDBBootstrapModule.forRoot(),
+    MatFormFieldModule,
+    MatDialogModule,
+    MatInputModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
