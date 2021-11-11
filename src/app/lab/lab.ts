@@ -16,10 +16,10 @@ export class Class {
 
 export class Grade {
   gradeId: number;
-  assessmentName: string;
+  gradeDate: Date;
   grade: number;
   gradeComment: string;
-  lab: Lab;
+  demo: Demo;
 }
 
 export class Demo {

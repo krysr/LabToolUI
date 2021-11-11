@@ -69,4 +69,10 @@ export class LabService {
     });
     return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/", lab, myHeaders);
   }
+
+  addGrade(grade: Grade): Observable<Grade> {
+    const myHeaders = { headers: new HttpHeaders( { 'Access-Control-Allow-Origin': 'http://localhost:4200',
+        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"})};
+    return this.http.post<Grade>("http://localhost:8080/grade/student/", grade, myHeaders);
+  }
 }
