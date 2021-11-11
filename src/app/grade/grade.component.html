@@ -1,0 +1,73 @@
+
+    <!--    style="background-image: url('images/bg-01.jpg');">-->
+    <h2 mat-dialog-title>{{data.demo.person.firstName}} {{data.demo.person.lastName}}</h2>
+
+
+    <mat-dialog-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onNoClick()" class="form">
+<!--    <form [formGroup]="loginForm" (ngSubmit)="onNoClick()" class="form">-->
+      <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+
+
+<!--        <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">-->
+<!--          <span class="label-input100">Name</span>-->
+<!--          <input class="input100" id="assessmentName" type="text" formControlName="assessmentName"-->
+<!--                 placeholder="Type the assessment name">-->
+<!--          <span class="focus-input100"></span>-->
+<!--        </div>-->
+
+        <div class="wrap-input100 validate-input" data-validate="Password is required">
+
+<!--          <span class="label-input100">Grade</span>-->
+          <div class="password-box">
+
+
+            <mat-form-field appearance="fill">
+              <mat-label>Grade</mat-label>
+              <input matInput id="grade" formControlName="grade">
+            </mat-form-field>
+<!--            <input class="input100" id="grade" type="text"-->
+<!--                   formControlName="grade" placeholder="Enter the grade" />-->
+          </div>
+        </div>
+
+        <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+          <mat-form-field appearance="fill">
+            <mat-label>Comment</mat-label>
+            <textarea style="height: 20vh"  id="gradeComment" formControlName="gradeComment"  matInput></textarea>
+          </mat-form-field>
+<!--          <span class="label-input100">Comment</span>-->
+<!--          <input class="input100" id="gradeComment" type="text" formControlName="gradeComment"-->
+<!--                 placeholder="Comment...">-->
+<!--          <span class="focus-input100"></span>-->
+        </div>
+      </div>
+      <button mat-raised-button>SUBMIT</button>
+      </form>
+        </mat-dialog-content>
+
+<!--    </form>-->
+
+
+
+
+<!--<p>grade works! {{test}} and </p>-->
+
+
+<!--<div id="modal-content-wrapper">-->
+<!--  <header id="modal-header">-->
+<!--    <h1 id="modal-title">Are you sure you want to logout?</h1>-->
+<!--  </header>-->
+<!--  <section id="modal-body">-->
+<!--    <p>If you logout bad things might happen, but don't mind me, I'm just the description in a modal...</p>-->
+<!--  </section>-->
+<!--  <footer id="modal-footer">-->
+<!--    <button mat-raised-button id="modal-action-button" (click)="actionFunction()">Logout</button>-->
+<!--    <button mat-raised-button id="modal-cancel-button" (click)="onNoClick()">Go back</button>-->
+<!--  </footer>-->
+<!--</div>-->
+<!--<div *ngIf="test">-->
+
+
+
+

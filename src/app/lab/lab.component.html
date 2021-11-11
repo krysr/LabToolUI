@@ -1,0 +1,95 @@
+
+<div class ="container">
+  <mat-drawer-container>
+    <mat-drawer mode="side" opened class="side-panel">
+    <span class="text-center"> Your labs: </span>
+    <div class = "card-body">
+            <table class="table table-striped">
+              <tbody>
+              <tr *ngFor = "let lab of labs">
+                <td> {{ lab.labClass.classId}}</td>
+                <td> {{ lab.labDay}}</td>
+                <td> {{ lab.startTime}}</td>
+              </tr>
+              </tbody>
+            </table>
+    </div>
+    </mat-drawer>
+    <mat-drawer-content>
+    <div class="current-lab">
+    <label class="current-lab-label">Current lab:</label>
+    <div class="current-lab-obj">
+      <label *ngIf="currentLab !== undefined"> {{currentLab.labClass.classId}}</label>
+    <label *ngIf="currentLab !== undefined"> {{currentLab.labClass.className}}</label>
+<!--    <label *ngIf="currentLab !== undefined"> {{currentLab.startTime}}</label>-->
+    <label *ngIf="currentLab !== undefined"> until {{currentLab.endTime}}</label>
+
+<!--      <label *ngIf="currentLab !== undefined"> {{currentLab.labClass.classId}} {{currentLab.labClass.className}} until {{currentLab.endTime}}</label>-->
+    </div>
+      </div>
+    <div class="next-lab">
+    <label class="next-lab-label">Next lab:</label>
+      <div class="next-lab-obj" *ngIf="nextLab != undefined">
+<!--    <table class="lab-lists table-striped">-->
+<!--      <tbody>-->
+<!--      <tr *ngFor = "let todaysLab of nextLab">-->
+<!--        <td> {{ todaysLab.labClass.className }}</td>-->
+<!--        <td> {{ todaysLab.labClass.classId }}</td>-->
+<!--        <td> {{ todaysLab.startTime }}</td>-->
+<!--        <td> {{ todaysLab.endTime }}</td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+      <label> {{nextLab.labClass.classId}}</label>
+      <label> {{nextLab.labClass.className}}</label>
+      <label> From {{nextLab.startTime}}</label>
+      </div>
+    </div>
+  <div class="demoBtn" *ngIf="currentLab != undefined">
+    <button class="demo-button" type="submit" *ngIf="!isDemo" (click)="demonstrate()">Demonstrate</button>
+
+  <div class="demotable" *ngIf="demoTable != null && isDemo">
+  <table mat-table [dataSource]="demoTable">
+    <ng-container matColumnDef="num">
+      <th mat-header-cell *matHeaderCellDef> No. </th>
+      <td mat-cell *matCellDef="let element;let i=index"> {{i+1}} </td>
+    </ng-container>
+    <ng-container matColumnDef="person.firstName">
+      <th mat-header-cell *matHeaderCellDef> First name </th>
+      <td mat-cell *matCellDef="let user"> {{user.person.firstName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="person.lastName">
+      <th mat-header-cell *matHeaderCellDef> Last name </th>
+      <td mat-cell *matCellDef="let user"> {{user.person.lastName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="button">
+      <th mat-header-cell *matHeaderCellDef> btn </th>
+<!--    <td mat-cell *matCellDef="let element; let i=index;"> <button *ngIf="i==0 && role !== 'student'" (click)="goToGrade(element)">Add Grade</button> </td>-->
+    <td mat-cell *matCellDef="let element; let i=index;"> <button *ngIf="i==0 && role !== 'student'" mat-raised-button (click)="goToGrade(element)">Add Grade</button> </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  </div>
+    <button class="button" type="submit" *ngIf="isDemo && role === 'student'" (click)="stopDemo()">Leave</button>
+  </div>
+<!--      <div *ngIf="testString != undefined">-->
+<!--      <app-grade [studentDemo]="currentStudentDemo"></app-grade>-->
+<!--      <app-grade [test]="testString"></app-grade>-->
+
+<!--      </div>-->
+<!--      <ol>-->
+<!--        <li>-->
+<!--          <button mat-raised-button (click)="openDialog()">Pick one</button>-->
+<!--        </li>-->
+<!--        <li *ngIf="grade">-->
+<!--          You chose: <i>{{grade}}</i>-->
+<!--        </li>-->
+<!--      </ol>-->
+
+            </mat-drawer-content>
+          </mat-drawer-container>
+        </div>
+
+
+        <!--<router-outlet></router-outlet>-->
