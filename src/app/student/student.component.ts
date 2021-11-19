@@ -20,4 +20,8 @@ export class StudentComponent implements OnInit {
       this.isDemonstrator = data.role.toLowerCase() === 'demonstrator';
     });
   }
+
+  setRole() {
+    localStorage.setItem('role', 'demonstrator');
+  }
 }

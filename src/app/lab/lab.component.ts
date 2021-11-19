@@ -16,6 +16,7 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 })
 export class LabComponent implements OnInit {
 
+  username: string | null;
   studentGrade: Grade = new Grade();
   testString: boolean;
   todaysDate: string;
@@ -32,11 +33,17 @@ export class LabComponent implements OnInit {
   isDemo: boolean = false;
   role: string;
   currentStudentDemo: Demo;
-  assessmentName: string;
   grade: number;
-  gradeComment: string;
   lab: Lab;
-  gradeDate: Date;
+  studentGrades: Grade;
+  isGradeSet: boolean;
+  pageLoaded: boolean;
+  isAccepted: boolean;
+  mm = 0;
+  ss = 0;
+  ms = 0;
+  isRunning = false;
+  timerId = 0;
 
 
 
@@ -45,10 +52,14 @@ export class LabComponent implements OnInit {
   constructor(private labService: LabService, private studentService: StudentService, private router: Router, public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.isAccepted = false;
+    this.pageLoaded = false;
+    this.username = localStorage.getItem('username');
     this.testString = false;
     this.isDemo = false;
 
     this.labService.getLab().subscribe((data) => {
+      this.pageLoaded = true;
       this.labs = data;
       this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
 
@@ -57,26 +68,24 @@ export class LabComponent implements OnInit {
         this.getTodaysLabs();
      }, 1000);
     });
-
-
   }
 
   getDate() {
     switch (new Date().getDay()) {
       case 1:
-        this.todaysDate = "Monday";
+        this.todaysDate = "monday";
         break;
       case 2:
-        this.todaysDate = "Tuesday";
+        this.todaysDate = "tuesday";
         break;
       case 3:
-        this.todaysDate = "Wednesday";
+        this.todaysDate = "wednesday";
         break;
       case 4:
-        this.todaysDate = "Thursday";
+        this.todaysDate = "thursday";
         break;
       case 5:
-        this.todaysDate = "Friday";
+        this.todaysDate = "friday";
         break;
     }
     this.currentHour = new Date().getHours().toString();
@@ -119,51 +128,44 @@ export class LabComponent implements OnInit {
     this.isDemo = true;
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "button"];
     this.labService.addDemonstrate(this.currentLab).subscribe((data) => {
-      // this.demoTable = new MatTableDataSource(data);
-      //   this.demoTable.sort = this.sort;
     });
-      //this.showQueue();
-    //   .subscribe((data) => {
-    //   console.log(data);
-    //   this.demoTable = new MatTableDataSource(data);
-    //   this.demoTable.sort = this.sort;
-    //   // this.demoTable = data;
-    // });
   }
 
   stopDemo() {
     this.isDemo = false;
     this.labService.removeDemonstrate(this.currentLab).subscribe((data) => {
-
     });
-    // .subscribe((data) => {
-    //   this.demoTable = new MatTableDataSource(data);
-    //   this.demoTable.sort = this.sort;
-    // });
   }
 
   showQueue() {
+    let found = false;
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
-    this.displayedColumns = ["num", "person.firstName", "person.lastName", "button"];
+    this.displayedColumns = ["num", "person.firstName", "person.lastName", "instructorBtn", "studentBtn"];
    // if(this.role === 'lecturer' || this.role === 'demonstrator' || this.isDemo) {
       //this.isDemo = true;
+    if (!!this.currentLab) {
       this.labService.getQueue(this.currentLab).subscribe((data) => {
         // console.log("in queue");
-        data.forEach( demo => {
-          if(demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
+        data.forEach(demo => {
+          if (demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
+            found = true;
             this.isDemo = true;
             this.demoTable = new MatTableDataSource(data);
             this.demoTable.sort = this.sort;
-           // this.currentStudentDemo =
-              //this.demoTable.get()
           }
         })
+        if (!found) {
+          this.isDemo = false;
+        }
       });
+      this.getGrade(this.username);
+    }
+
    // }
   }
 
-  goToGrade(row: Demo) {
+  addGrade(row: Demo) {
 
     console.log(row.person, row.lab, row.demoId);
     this.currentStudentDemo = row;
@@ -200,12 +202,53 @@ export class LabComponent implements OnInit {
       if(!!this.studentGrade) {
         this.labService.addGrade(this.studentGrade).subscribe((data) => {
           console.log(data);
+          // this.isAccepted = false;
+          // this.startTimer();
         });
       }
     });
+  }
 
+  getGrade(username: string | null) {
+    // @ts-ignore
+    this.labService.getGrade(username, this.currentLab.labId).subscribe((data) => {
+      if(!!data) {
+        this.isGradeSet = true;
+        this.studentGrades = data;
+      }
+    });
+  }
 
+  acceptStudent(row: Demo) {
 
   }
 
+  startTimer() {
+    this.isAccepted = true;
+    if (!this.isRunning) {
+      // Stop => Running
+      this.timerId = setInterval(() => {
+        this.ms++;
+
+        if (this.ms >= 100) {
+          this.ss++;
+          this.ms = 0;
+        }
+        if (this.ss >= 60) {
+          this.mm++;
+          this.ss = 0
+        }
+      }, 10);
+    } else {
+      clearInterval(this.timerId);
+      this.ss = 0;
+      this.mm = 0;
+      this.ms = 0;
+    }
+    this.isRunning = !this.isRunning;
+  }
+
+  format(num: number) {
+    return (num + '').length === 1 ? '0' + num : num + '';
+  }
 }

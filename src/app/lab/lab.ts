@@ -1,7 +1,7 @@
 import {Student} from "../student/student";
 
 export class Lab {
-  labid: number;
+  labId: number;
   labDay: string;
   startTime: number;
   endTime: number;

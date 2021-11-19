@@ -26,6 +26,8 @@ import {MDBBootstrapModule} from "angular-bootstrap-md";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
+import { UploadStudentComponent } from './upload-student/upload-student.component';
+import {MatSelectModule} from "@angular/material/select";
 
 
 
@@ -49,7 +51,8 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'student', component: StudentComponent },
   { path: 'admin', component: DemonstratorComponent },
-  { path: 'grade', component: GradeComponent }
+  { path: 'grade', component: GradeComponent },
+  { path: 'upload', component: UploadStudentComponent }
 ];
 
 @NgModule({
@@ -64,7 +67,8 @@ const routes: Routes = [
     StudentComponent,
     LabComponent,
     DemonstratorComponent,
-    GradeComponent
+    GradeComponent,
+    UploadStudentComponent
   ],
   entryComponents: [
     GradeComponent
@@ -87,7 +91,8 @@ const routes: Routes = [
     MDBBootstrapModule.forRoot(),
     MatFormFieldModule,
     MatDialogModule,
-    MatInputModule
+    MatInputModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]
