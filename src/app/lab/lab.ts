@@ -5,8 +5,8 @@ export class Lab {
   labDay: string;
   startTime: number;
   endTime: number;
+  room: string;
   labClass: Class;
-  // personlabs: Demo
 }
 
 export class Class {
@@ -24,7 +24,7 @@ export class Grade {
 
 export class Demo {
     demoId: number;
-    demo: boolean;
+    demo: string;
     position: number;
     lab: Lab;
     person: Person;

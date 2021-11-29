@@ -10,6 +10,25 @@
 /*  !*color: red;*!*/
 /*}*/
 
+/*.mat-row {*/
+/*  height: auto;*/
+/*}*/
+
+.mat-cell {
+  padding: 10px 10px 10px 0;
+}
+
+table.mat-table {
+  margin-left: 15em !important;
+  margin-top: 5em;
+}
+/*table {*/
+/*  border-spacing: 10px !important;*/
+/*}*/
+.demo-label {
+  color: crimson;
+}
+
 #body-content {overflow: hidden;}
 
 
@@ -32,6 +51,9 @@
   height: 100vh;
 }
 
+.mark {
+  float: right;
+}
 .mat-drawer-content {
   height: 100vh;
 }

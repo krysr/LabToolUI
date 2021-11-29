@@ -60,7 +60,7 @@ export class LabService {
   //   this.http.post<PersonLab[]>("http://localhost:8080/lab/demonstrate/"+ this.username, lab, myHeaders);
   // }
 
-  removeDemonstrate(lab: Lab): Observable<Demo[]> {
+  removeDemonstrate(demo: Demo): Observable<Demo[]> {
     const myHeaders = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': 'http://localhost:4200',
@@ -68,7 +68,7 @@ export class LabService {
       })
     };
     // return this.http.post<PersonLab[]>("http://localhost:8080/lab/demonstrate/end/"+ this.username, lab, myHeaders);
-    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/end/" + this.username, lab, myHeaders);
+    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/end/" + this.username, demo, myHeaders);
   }
 
   getQueue(lab: Lab): Observable<Demo[]> {

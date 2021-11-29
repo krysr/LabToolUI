@@ -28,6 +28,8 @@ import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import { UploadStudentComponent } from './upload-student/upload-student.component';
 import {MatSelectModule} from "@angular/material/select";
+import {MatListModule} from "@angular/material/list";
+import { StatisticComponent } from './statistic/statistic.component';
 
 
 
@@ -68,32 +70,34 @@ const routes: Routes = [
     LabComponent,
     DemonstratorComponent,
     GradeComponent,
-    UploadStudentComponent
+    UploadStudentComponent,
+    StatisticComponent
   ],
   entryComponents: [
     GradeComponent
   ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDividerModule,
-    FormsModule,
-    ReactiveFormsModule,
-    // AppRoutingModule,
-    NgbModule,
-    MatProgressSpinnerModule,
-    RouterModule.forRoot(routes),
-    MatTableModule,
-    MatSidenavModule,
-    BrowserAnimationsModule,
-    MDBBootstrapModule.forRoot(),
-    MatFormFieldModule,
-    MatDialogModule,
-    MatInputModule,
-    MatSelectModule
-  ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        MatIconModule,
+        MatButtonModule,
+        MatDividerModule,
+        FormsModule,
+        ReactiveFormsModule,
+        // AppRoutingModule,
+        NgbModule,
+        MatProgressSpinnerModule,
+        RouterModule.forRoot(routes),
+        MatTableModule,
+        MatSidenavModule,
+        BrowserAnimationsModule,
+        MDBBootstrapModule.forRoot(),
+        MatFormFieldModule,
+        MatDialogModule,
+        MatInputModule,
+        MatSelectModule,
+        MatListModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
