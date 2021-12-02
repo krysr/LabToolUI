@@ -19,6 +19,7 @@ import {Statistic} from "../statistic/statistic";
 export class LabComponent implements OnInit {
 
   username: string | null;
+  demoQueue: Demo[];
   studentGrade: Grade = new Grade();
   testString: boolean;
   todaysDate: string;
@@ -49,8 +50,8 @@ export class LabComponent implements OnInit {
   isFirstPos: Demo | undefined;
   studentName: string;
   isAvailable: boolean = true;
-  startTime: Date;
-  endTime: Date;
+  demoStartTime: Date;
+  demoEndTime: Date;
   waitingTime: number;
   joinQueue: Date;
 
@@ -138,10 +139,16 @@ export class LabComponent implements OnInit {
   demonstrate() {
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
+    // this.joinQueue = new Date();
     this.isDemo = true;
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "button"];
     this.labService.addDemonstrate(this.currentLab).subscribe((data) => {
     });
+    // let stats: Statistic = new Statistic();
+    // stats.joinTime = new Date();
+    // this.statService.getStats(stats).subscribe((data) => {
+    //
+    // });
     this.startTimer(false);
   }
 
@@ -154,8 +161,7 @@ export class LabComponent implements OnInit {
   }
 
   showQueue() {
-
-    let found = false;
+console.log("in queue");
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "instructorBtn", "liveDemo"];
@@ -165,32 +171,40 @@ export class LabComponent implements OnInit {
       this.labService.getQueue(this.currentLab).subscribe((data) => {
         // console.log("in queue");
         data.forEach(demo => {
-          if (demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
-            found = true;
+          this.demoQueue = data.filter(obj => obj.demo !== 'done');
+          if (demo.demo !== 'done' && demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
             this.isDemo = true;
-            this.demoTable = new MatTableDataSource(data);
+            this.demoTable = new MatTableDataSource(this.demoQueue);
             this.demoTable.sort = this.sort;
             this.isFirstPos = this.demoTable.data.find(x => x.demo === 'yes');
-            if(demo.person.dsUsername === this.username && demo.demo === "live" && this.startTime === null) {
-              this.startTime = new Date();
-              this.currentStudentDemo = demo;
-              this.waitingTime = this.startTime.getTime() - this.joinQueue.getTime();
+          }
+            if(demo.person.dsUsername === this.username && demo.demo === "yes" && this.joinQueue === undefined) {
+              this.joinQueue = new Date();
+              this.addStats(demo);
+              // console.log("in live for student ");
+              // this.demoStartTime = new Date();
+              // //this.currentStudentDemo = demo;
+              // this.waitingTime = this.demoStartTime.getTime() - this.joinQueue.getTime();
+              // console.log("waiting time " + this.waitingTime);
               //this.startTimer(true);
             }
-          }
+            if(demo.person.dsUsername === this.username && this.role === 'student' && demo.demo === "done" && this.isDemo) {
+              console.log("in done for student ");
+              this.isDemo = false;
+              //this.addStats(demo);
+              this.getGrade(this.username);
+            }
+
         })
-        if (!found) {
-          this.isDemo = false;
-        }
       });
-      this.getGrade(this.username);
+
     }
 
    // }
   }
 
   addGrade(row: Demo) {
-
+  this.demoEndTime = new Date();
     console.log(row.person, row.lab, row.demoId);
     this.currentStudentDemo = row;
     const dialogConfig = new MatDialogConfig();
@@ -201,11 +215,8 @@ export class LabComponent implements OnInit {
     dialogConfig.data = {
       row
     };
-    // const modalDialog = this.dialog.open(GradeComponent, dialogConfig);
 
     this.testString = true;
-   // console.log("row " + this.currentStudentDemo.person.dsUsername);
-
 
     const dialogRef = this.dialog.open(GradeComponent, {
       width: '600px',
@@ -216,22 +227,21 @@ export class LabComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       let studentDate = new Date();
-      // this.gradeDate =this.datepipe.transform(this.gradeDate, 'DD-MM-YYYY');
 
       console.log("result is "+result.grade + " " + result.comment);
       this.studentGrade.grade = result.grade;
       this.studentGrade.gradeComment = result.comment;
       this.studentGrade.gradeDate = studentDate;
       this.studentGrade.demo = row;
-      this.isAvailable = false;
+      this.isAvailable = true;
       if(!!this.studentGrade) {
         this.labService.addGrade(this.studentGrade).subscribe((data) => {
           console.log(data);
-          // this.isAccepted = false;
-          // this.startTimer();
         });
       }
+
     });
+    this.addStats(row);
   }
 
   getGrade(username: string | null) {
@@ -240,26 +250,15 @@ export class LabComponent implements OnInit {
       if(!!data) {
         this.isGradeSet = true;
         this.studentGrades = data;
-        if (this.endTime === null) {
-          this.endTime = new Date();
-          //this.waitingTime = this.endTime.getTime() - this.startTime.getTime();
-        }
       }
     });
-    let stats: Statistic = new Statistic;
-    stats.demo = this.currentStudentDemo;
-    stats.waitingTime = this.waitingTime;
-    stats.demoStartTime = this.startTime;
-    stats.demoEndTime = this.endTime;
-    stats.date = new Date();
 
-    this.statService.getStats(stats).subscribe((data) => {
-
-    });
 
   }
 
   acceptStudent(row: Demo) {
+    this.demoStartTime = new Date();
+    this.waitingTime = (new Date).getTime();
     this.currentStudentDemo = row;
     this.studentName = this.currentStudentDemo.person.dsUsername;
     this.isAvailable = false;
@@ -273,8 +272,6 @@ export class LabComponent implements OnInit {
     if(!inDemo) {
 
     }
-
-    this.joinQueue = new Date();
 
     if (!this.isRunning) {
       this.timerId = setInterval(() => {
@@ -300,6 +297,28 @@ export class LabComponent implements OnInit {
 
   format(num: number) {
     return (num + '').length === 1 ? '0' + num : num + '';
+  }
+
+  addStats(demo: Demo) {
+    let stats: Statistic = new Statistic;
+    stats.demo = demo;
+    if(this.role === 'student') {
+      stats.joinTime = this.joinQueue;
+      stats.date = new Date();
+      this.statService.addStats(stats, this.role).subscribe((data) => {
+
+      });
+    } else {
+      //stats.waitingTime = this.waitingTime;
+      stats.demoStartTime = this.demoStartTime;
+      stats.demoEndTime = this.demoEndTime;
+      stats.date = new Date();
+
+      this.statService.addStats(stats, this.role).subscribe((data) => {
+
+      });
+    }
+
   }
 
 }

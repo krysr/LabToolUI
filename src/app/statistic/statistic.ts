@@ -8,4 +8,5 @@ export class Statistic {
   demoStartTime: Date;
   demoEndTime: Date;
   date: Date;
+  joinTime: Date;
 }
