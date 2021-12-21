@@ -10,3 +10,11 @@ export class Statistic {
   date: Date;
   joinTime: Date;
 }
+
+export class StatCollection {
+  demo: Demo;
+  joinTime: string;
+  waitingTime: string
+  demoTime: string
+  date: Date;
+}
