@@ -7,6 +7,7 @@ import {MatTableDataSource} from "@angular/material/table";
 import {MatSort, Sort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StatCollection, Statistic} from "../statistic/statistic";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-upload-student',
@@ -37,14 +38,19 @@ export class UploadStudentComponent implements OnInit {
   avgWaitStr: string;
   avgDemoStr: string;
   successMsg: boolean = false;
+  firstName: string;
 
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private uploadStudentService: UploadStudentService, private formBuilder: FormBuilder, private labService: LabService) {
+  constructor(private uploadStudentService: UploadStudentService, private formBuilder: FormBuilder, private labService: LabService, private router: Router) {
   }
 
   ngOnInit(): void {
+    this.labService.getName(localStorage.getItem('username')).subscribe((data) =>
+    {
+      this.firstName = data.firstName;
+    })
     this.getLabs();
     this.labForm = this.formBuilder.group({
       labDay: ['', Validators.required],
@@ -67,7 +73,7 @@ export class UploadStudentComponent implements OnInit {
   }
 
   getLabs(): void {
-    this.labService.getLab().subscribe((data) => {
+    this.labService.getLab('lecturer').subscribe((data) => {
       this.labList = data;
       //this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
     });
@@ -201,5 +207,10 @@ export class UploadStudentComponent implements OnInit {
 
     return hoursStr + ":" + minutesStr + ":" + secondsStr;
 
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(["/login"]);
   }
 }

@@ -54,30 +54,41 @@ export class LabComponent implements OnInit {
   demoEndTime: Date;
   waitingTime: number;
   joinQueue: Date;
-
+  interHandle: any;
+  firstName: string;
 
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private labService: LabService, private statService: StatisticService, private router: Router, public dialog: MatDialog) { }
+  constructor(private labService: LabService, private statService: StatisticService, private router: Router, public dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
     this.isAccepted = false;
     this.pageLoaded = false;
     this.username = localStorage.getItem('username');
-    this.testString = false;
+    // @ts-ignore
+    this.role = localStorage.getItem('role');
     this.isDemo = false;
 
-    this.labService.getLab().subscribe((data) => {
+    this.labService.getLab(this.role).subscribe((data) => {
       this.pageLoaded = true;
       this.labs = data;
       this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
 
-      setInterval(() => {
+      this.getName();
+      this.interHandle = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
-     }, 1000);
+      }, 1000);
     });
+  }
+
+  getName() {
+  this.labService.getName(this.username).subscribe((data) =>
+  {
+    this.firstName = data.firstName;
+  })
   }
 
   getDate() {
@@ -112,7 +123,7 @@ export class LabComponent implements OnInit {
   getTodaysLabs() {
     this.todaysLabs = [];
     this.nextLabs = [];
-    this.labs.forEach( (element) => {
+    this.labs.forEach((element) => {
       if (element.labDay === this.todaysDate) {
         this.todaysLabs.push(element);
       }
@@ -121,14 +132,13 @@ export class LabComponent implements OnInit {
   }
 
   getNextLabs() {
-    this.todaysLabs.forEach( (element) => {
-     // this.labTime = +(element.labDay.replace(':', ''));
-      if( this.currentTime >= element.startTime && this.currentTime <= element.endTime) {
+    this.todaysLabs.forEach((element) => {
+      // this.labTime = +(element.labDay.replace(':', ''));
+      if (this.currentTime >= element.startTime && this.currentTime <= element.endTime) {
         this.currentLab = element;
-      }
-      else if (this.currentTime < element.startTime) {
+      } else if (this.currentTime < element.startTime) {
         this.nextLabs.push(element);
-        this.nextLabs.sort((n1 ,n2) => n1.startTime - n2.startTime);
+        this.nextLabs.sort((n1, n2) => n1.startTime - n2.startTime);
         this.nextLab = this.nextLabs[0];
         // console.log(this.nextLabs + " next one " + this.nextLab);
       }
@@ -161,15 +171,12 @@ export class LabComponent implements OnInit {
   }
 
   showQueue() {
-console.log("in queue");
+    console.log("in queue");
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
-    this.displayedColumns = ["num", "person.firstName", "person.lastName", "instructorBtn", "liveDemo"];
-   // if(this.role === 'lecturer' || this.role === 'demonstrator' || this.isDemo) {
-      //this.isDemo = true;
+    this.displayedColumns = ["num", "person.firstName", "person.lastName", "instructorBtn", "liveDemo", "exit"];
     if (!!this.currentLab) {
       this.labService.getQueue(this.currentLab).subscribe((data) => {
-        // console.log("in queue");
         data.forEach(demo => {
           this.demoQueue = data.filter(obj => obj.demo !== 'done');
           if (demo.demo !== 'done' && demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
@@ -178,33 +185,40 @@ console.log("in queue");
             this.demoTable.sort = this.sort;
             this.isFirstPos = this.demoTable.data.find(x => x.demo === 'yes');
           }
-            if(demo.person.dsUsername === this.username && demo.demo === "yes" && this.joinQueue === undefined) {
-              this.joinQueue = new Date();
-              this.addStats(demo);
-              // console.log("in live for student ");
-              // this.demoStartTime = new Date();
-              // //this.currentStudentDemo = demo;
-              // this.waitingTime = this.demoStartTime.getTime() - this.joinQueue.getTime();
-              // console.log("waiting time " + this.waitingTime);
-              //this.startTimer(true);
-            }
-            if(demo.person.dsUsername === this.username && this.role === 'student' && demo.demo === "done" && this.isDemo) {
-              console.log("in done for student ");
-              this.isDemo = false;
-              //this.addStats(demo);
-              this.getGrade(this.username);
-            }
+          if (demo.person.dsUsername === this.username && demo.demo === "yes" && this.joinQueue === undefined) {
+            this.joinQueue = new Date();
+            this.addStats(demo);
+          }
+          // if (demo.person.dsUsername === this.username && this.role === 'student' && demo.demo === "done" && this.isDemo) {
+          //   console.log("in done for student ");
+          //   this.isDemo = false;
+          //   //this.addStats(demo);
+          //   this.getGrade(this.username);
+          // }
+          this.getGrade(this.username);
 
         })
       });
 
     }
 
-   // }
+    // }
+  }
+
+  toggleTable(showQueue: boolean) {
+    if(showQueue) {
+      this.interHandle = setInterval(() => {
+        this.getDate();
+        this.getTodaysLabs();
+      }, 1000);
+  } else {
+      this.isDemo = false;
+      clearInterval(this.interHandle);
+    }
   }
 
   addGrade(row: Demo) {
-  this.demoEndTime = new Date();
+    this.demoEndTime = new Date();
     console.log(row.person, row.lab, row.demoId);
     this.currentStudentDemo = row;
     const dialogConfig = new MatDialogConfig();
@@ -221,20 +235,20 @@ console.log("in queue");
     const dialogRef = this.dialog.open(GradeComponent, {
       width: '600px',
       height: '600px',
-      data : {demo: row}
+      data: {demo: row}
       // data: {name: this.assessmentName, grade: this.grade, comment: this.gradeComment, lab: this.lab},
     });
 
     dialogRef.afterClosed().subscribe(result => {
       let studentDate = new Date();
 
-      console.log("result is "+result.grade + " " + result.comment);
+      console.log("result is " + result.grade + " " + result.comment);
       this.studentGrade.grade = result.grade;
       this.studentGrade.gradeComment = result.comment;
       this.studentGrade.gradeDate = studentDate;
       this.studentGrade.demo = row;
       this.isAvailable = true;
-      if(!!this.studentGrade) {
+      if (!!this.studentGrade) {
         this.labService.addGrade(this.studentGrade).subscribe((data) => {
           console.log(data);
         });
@@ -247,7 +261,7 @@ console.log("in queue");
   getGrade(username: string | null) {
     // @ts-ignore
     this.labService.getGrade(username, this.currentLab.labId).subscribe((data) => {
-      if(!!data) {
+      if (!!data && new Date(data.gradeDate).getDay() === new Date().getDay() && new Date(data.gradeDate).getMonth() === new Date().getMonth()) {
         this.isGradeSet = true;
         this.studentGrades = data;
       }
@@ -269,7 +283,7 @@ console.log("in queue");
 
   startTimer(inDemo: boolean) {
     this.isAccepted = true;
-    if(!inDemo) {
+    if (!inDemo) {
 
     }
 
@@ -302,7 +316,7 @@ console.log("in queue");
   addStats(demo: Demo) {
     let stats: Statistic = new Statistic;
     stats.demo = demo;
-    if(this.role === 'student') {
+    if (this.role === 'student') {
       stats.joinTime = this.joinQueue;
       stats.date = new Date();
       this.statService.addStats(stats, this.role).subscribe((data) => {
@@ -319,6 +333,23 @@ console.log("in queue");
       });
     }
 
+  }
+
+  switchInterface(role: string) {
+    this.labService.getLab(role).subscribe((data) => {
+      this.labs = data;
+      this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
+
+      setInterval(() => {
+        this.getDate();
+        this.getTodaysLabs();
+      }, 1000);
+    });
+  }
+
+  logout() {
+    localStorage.clear();
+    this.router.navigate(["/login"]);
   }
 
 }

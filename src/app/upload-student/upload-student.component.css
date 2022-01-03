@@ -1,12 +1,51 @@
-/*:host {*/
-/*  display: flex;*/
-/*  flex-direction: column;*/
-/*  align-items: flex-start;*/
-/*}*/
+
+body, html {
+  height: 100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: url("src/assets/backgroundModified.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
 
 .container {
-  width: 100%;
-  /*margin-left: 30vw;*/
+  width: 55vw;
+  height: 83vh;
+  margin-left: 20vw;
+  margin-top: 5vh;
+  border-style: solid;
+  border-color: #ffffff;
+  border-radius: 20px;
+  padding-top: 3vh;
+  padding-left:3vh;
+  padding-right: 3vh;
+  background: #fff;
+  position: relative;
+}
+
+.header {
+  margin-top: 0;
+}
+
+.mat-icon {
+  color: #B4B8B8;
+  transform: scale(3);
+  /*margin-left: 16vw;*/
+}
+
+.user {
+  color: #B4B8B8;
+  margin-left: 17vw;
+  /*margin-right: 15vw;*/
+  font-size: 2em;
+  padding: 0;
+  margin-right: 13vw
+}
+
+.mat-menu-item {
+  font-size: 2vh;
 }
 
 .form {
@@ -15,9 +54,15 @@
   align-items: flex-start;
 }
 
-/*::ng-deep.mat-select-panel {*/
-/*  width: 20em !important;*/
-/*}*/
+.my-tabs {
+  margin-top: 5vh;
+}
+
+::ng-deep .mat-tab-label {
+  padding-left: 6vw !important;
+  font-size: 2vh;
+  color: #000000;
+}
 
 mat-form-field {
   width:100%;
@@ -31,3 +76,28 @@ mat-panel-title {
   width: 100%;
 }
 
+.my-btn {
+  font-family: Helvetica, sans-serif;
+  font-size: 25px;
+  font-weight: bold;
+  color: #fff;
+  padding: 0;
+  width: 55vw;
+  height: 4vh;
+  background: #000000;
+  border-radius: 6px;
+}
+
+.my-btn:hover {
+  background-image: linear-gradient(135deg, #000000, #0b5697, #000000);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.mat-cell {
+  font-size: 1em;
+}
+
+.mat-header-cell {
+  font-size: 1em;
+}

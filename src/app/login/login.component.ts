@@ -72,9 +72,9 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('username', data.dsUsername);
         localStorage.setItem('role', data.role);
         if (data.role === 'lecturer') {
-          this.router.navigate(["/admin"]);
+          this.router.navigate(["/lab"]);
         } else {
-          this.router.navigate(["/student"]);
+          this.router.navigate(["/lab"]);
         }
       } else {
         this.showErrorMsg = true;

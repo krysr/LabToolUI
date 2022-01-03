@@ -22,7 +22,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {GradeComponent} from './grade/grade.component';
-import {MDBBootstrapModule} from "angular-bootstrap-md";
+import {MDBBootstrapModule, ModalModule} from "angular-bootstrap-md";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
@@ -34,6 +34,8 @@ import {MatTabsModule} from "@angular/material/tabs";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSortModule} from "@angular/material/sort";
+import {MatCardModule} from "@angular/material/card";
+import {MatMenuModule} from "@angular/material/menu";
 
 
 // @Injectable()
@@ -55,6 +57,7 @@ const routes: Routes = [
   // { path: 'main', component: AppComponent },
   {path: 'home', component: HomeComponent},
   {path: 'student', component: StudentComponent},
+  {path: 'lab', component: LabComponent},
   {path: 'admin', component: DemonstratorComponent},
   {path: 'grade', component: GradeComponent},
   {path: 'upload', component: UploadStudentComponent}
@@ -103,7 +106,10 @@ const routes: Routes = [
     MatTabsModule,
     NgxMaterialTimepickerModule,
     MatExpansionModule,
-    MatSortModule
+    MatSortModule,
+    MatCardModule,
+    ModalModule,
+    MatMenuModule
   ],
   providers: [],
   bootstrap: [AppComponent]
