@@ -77,9 +77,10 @@
                 </mat-select>
               </mat-form-field>
               <mat-card>
-                  <label class="upload">Please upload a .xlsx file containing student's emails only</label><br>
+                <label class="upload">Please upload a .xlsx file containing student's emails only</label><br>
                 <input type="file" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
-                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="fileUpload()">UPLOAD</button>
+                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="fileUpload()">UPLOAD
+                </button>
               </mat-card>
 
 
@@ -89,10 +90,10 @@
                   <mat-label>Student email</mat-label>
                   <input matInput formControlName="email" placeholder="email" required>
                 </mat-form-field>
-                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="formUpload('student')">UPLOAD</button>
-
+                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="formUpload('student')">
+                  UPLOAD
+                </button>
               </mat-card>
-
             </form>
           </mat-expansion-panel>
 
@@ -119,8 +120,10 @@
                 <mat-label>Demonstrator email</mat-label>
                 <input matInput formControlName="email" placeholder="email" required>
               </mat-form-field>
-              <button type="button" mat-button mat-raised-button class="upload-btn" (click)="formUpload('demonstrator')">SUBMIT</button>
-              </form>
+              <button type="button" mat-button mat-raised-button class="upload-btn"
+                      (click)="formUpload('demonstrator')">SUBMIT
+              </button>
+            </form>
           </mat-expansion-panel>
         </mat-accordion>
       </mat-tab>
@@ -130,7 +133,6 @@
       <mat-tab label="Statistic">
         <mat-form-field appearance="fill">
           <mat-label>Select lab</mat-label>
-<!--          <mat-select formControlName="lab" required>-->
           <mat-select required>
             <mat-option (onSelectionChange)="filterLabs(lab, $event)" *ngFor="let lab of labList" [value]="lab">
               {{lab.labClass.classId}}
@@ -148,7 +150,6 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-
 
         <div class="stat-table" *ngIf="statTable != null">
           <table mat-table [dataSource]="statTable" matSort matSortDirection="asc" multiTemplateDataRows>

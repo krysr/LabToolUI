@@ -1,29 +1,27 @@
+<h2 mat-dialog-title>{{data.demo.person.firstName}} {{data.demo.person.lastName}}</h2>
 
-    <h2 mat-dialog-title>{{data.demo.person.firstName}} {{data.demo.person.lastName}}</h2>
+<mat-dialog-content>
+  <form [formGroup]="loginForm" (ngSubmit)="submitGrade()" class="form">
+    <div class="card">
 
-    <mat-dialog-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onNoClick()" class="form">
-      <div class="card">
-
-          <div class="grade-box">
-            <mat-form-field appearance="fill">
-              <mat-label>Grade</mat-label>
-              <input matInput id="grade" formControlName="grade">
-            </mat-form-field>
-          </div>
-
-
-        <div class="comment-box">
-          <mat-form-field appearance="fill">
-            <mat-label>Comment</mat-label>
-            <textarea style="height: 20vh"  id="gradeComment" formControlName="gradeComment"  matInput></textarea>
-          </mat-form-field>
-
-        </div>
+      <div class="grade-box">
+        <mat-form-field appearance="fill">
+          <mat-label>Grade</mat-label>
+          <input matInput id="grade" formControlName="grade">
+        </mat-form-field>
       </div>
-      <button mat-raised-button class="submit-btn">SUBMIT</button>
-      </form>
-        </mat-dialog-content>
+
+      <div class="comment-box">
+        <mat-form-field appearance="fill">
+          <mat-label>Comment</mat-label>
+          <textarea style="height: 20vh" id="gradeComment" formControlName="gradeComment" matInput></textarea>
+        </mat-form-field>
+
+      </div>
+    </div>
+    <button mat-raised-button class="submit-btn">SUBMIT</button>
+  </form>
+</mat-dialog-content>
 
 
 

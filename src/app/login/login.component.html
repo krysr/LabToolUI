@@ -1,40 +1,34 @@
-
 <body>
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
-      <div class="wrap-login100">
-        <img src="../../assets/logo.png" alt="Lab Assistant" width="180vw" height="320vh" class="logo">
-					<span class="form-title">
-						Login
-					</span>
-
-          <div class="card-input" data-validate="Username is reauired">
-            <span class="label-input100">Username</span>
-            <input matInput class="input100" id="username" type="text" formControlName="username"
-                   placeholder="Type your username" required>
-          </div>
-
-          <div class="card-input" data-validate="Password is required">
-
-              <span class="label-input100">Password</span>
-            <div class="password-box">
-              <input  matInput class="input100" id="password" type="password"
-                     [type]="fieldTextType ? 'text' : 'password'"
-                     formControlName="password" placeholder="Type your password" required/>
-            <span  class="fa fa-fw field-icon toggle-password"
-                   [ngClass]="{
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+  <div class="wrap-login100">
+    <img src="../../assets/logo.png" alt="Lab Assistant" width="180vw" height="320vh" class="logo">
+    <span class="form-title">Login</span>
+    <div class="card-input">
+      <span class="label-input100">Username</span>
+      <input matInput class="input100" id="username" type="text" formControlName="username"
+             placeholder="Type your username" required>
+    </div>
+    <div class="card-input" data-validate="Password is required">
+      <span class="label-input100">Password</span>
+      <div class="password-box">
+        <input matInput class="input100" id="password" type="password"
+               [type]="fieldTextType ? 'text' : 'password'"
+               formControlName="password" placeholder="Type your password" required/>
+        <span class="fa fa-fw field-icon toggle-password"
+              [ngClass]="{
                         'fa-eye-slash': !fieldTextType,
                         'fa-eye': fieldTextType
                       }"
-                   (click)="toggleFieldTextType() "></span>
-          </div>
-          </div>
-            <div class="card-login-btn">
-              <button class="login-btn">
-                LOGIN
-              </button>
-            </div>
-          </div>
-    </form>
+              (click)="toggleFieldTextType() "></span>
+      </div>
+    </div>
+    <div class="card-login-btn">
+      <button class="login-btn">
+        LOGIN
+      </button>
+    </div>
+  </div>
+</form>
 </body>
 <router-outlet></router-outlet>
 

@@ -17,23 +17,12 @@ export class LabService {
   getLab(role: string): Observable<Lab[]> {
     let params = new HttpParams();
 
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
     if (localStorage.getItem('username') !== null) {
       // @ts-ignore
       this.username = localStorage.getItem('username').toString();
-      // @ts-ignore
-      // this.role = localStorage.getItem('role').toString();
-
       params.set('role', role);
-      // params.set('test', this.test);
     }
 
-// return this.http.get<Student[]>(`${this.baseUrl}`, myHeaders);
     return this.http.get<Lab[]>(this.baseUrl + this.username + "?role=" + role, {params});
   }
 
@@ -58,7 +47,7 @@ export class LabService {
         "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
       })
     };
-    // return this.http.post<PersonLab[]>("http://localhost:8080/lab/demonstrate/end/"+ this.username, lab, myHeaders);
+
     return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/end/" + this.username, demo, myHeaders);
   }
 
@@ -69,9 +58,7 @@ export class LabService {
         "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
       })
     };
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
+
     return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/", lab, myHeaders);
   }
 

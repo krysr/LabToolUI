@@ -1,5 +1,4 @@
 import {Demo} from "../lab/lab";
-import {Time} from "@angular/common";
 
 export class Statistic {
   statId: number;

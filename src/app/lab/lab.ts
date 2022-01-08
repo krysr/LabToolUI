@@ -1,5 +1,3 @@
-import {Student} from "../student/student";
-
 export class Lab {
   labId: number;
   labDay: string;

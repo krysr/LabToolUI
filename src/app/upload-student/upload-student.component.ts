@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import * as XLSX from 'ts-xlsx';
 import {Class, Demo, Lab} from "../lab/lab";
 import {LabService} from "../lab/lab.service";
@@ -34,11 +34,9 @@ export class UploadStudentComponent implements OnInit {
   stats: Statistic[];
   filteredStats: Statistic[];
   displayStats: StatCollection[];
-  groupByColumn: string = 'date';
   labDate: string[];
   avgWaitStr: string;
   avgDemoStr: string;
-  successMsg: boolean = false;
   firstName: string;
 
 
@@ -122,7 +120,6 @@ export class UploadStudentComponent implements OnInit {
           console.log("sorry something went wrong")
         );
       }
-      console.log("type " + typeof (result));
     }
     fileReader.readAsArrayBuffer(this.fileToUpload);
   }
@@ -184,7 +181,6 @@ export class UploadStudentComponent implements OnInit {
     if (event.isUserInput) {
       this.displayStats = [];
       this.filteredStats = [];
-      this.groupByColumn = "Date";
       this.displayedColumns = ["Student", "JoinTime", "WaitingTime", "TotalDemo"];
       this.avgDemoFooter = ['avgDemoHeader', 'avgDemo'];
       this.filteredStats = this.stats.filter(obj => new Date(obj.date).toDateString() === date.slice(0, 15));
