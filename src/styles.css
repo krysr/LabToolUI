@@ -11,3 +11,20 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.login-snackbar {
+  font-family: "Helvetica", sans-serif !important;
+  font-size: 2.5vh !important;
+  color: #000000;
+  background: #CC5951;
+  width: 50vw;
+  height: 5vh;
+}
+
+.success-snackbar {
+  background: #ffffff;
+  color: #4BAD66;
+  border: #4BAD66 2px solid;
+  width: 100vw;
+}
+

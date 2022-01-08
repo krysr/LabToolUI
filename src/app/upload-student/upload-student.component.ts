@@ -8,6 +8,7 @@ import {MatSort, Sort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StatCollection, Statistic} from "../statistic/statistic";
 import {Router} from "@angular/router";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-upload-student',
@@ -43,7 +44,11 @@ export class UploadStudentComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private uploadStudentService: UploadStudentService, private formBuilder: FormBuilder, private labService: LabService, private router: Router) {
+  constructor(private uploadStudentService: UploadStudentService,
+              private formBuilder: FormBuilder,
+              private labService: LabService,
+              private router: Router,
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -67,16 +72,21 @@ export class UploadStudentComponent implements OnInit {
     })
   }
 
-  handleFileInput(files: FileList) {
-    // this.fileToUpload = files.item(0);
-    // this.file= event.target.files[0];
-  }
-
   getLabs(): void {
     this.labService.getLab('lecturer').subscribe((data) => {
       this.labList = data;
-      //this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
+      this.sortLabs(this.labList);
     });
+  }
+
+  sortLabs(labs: Lab[]) {
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    labs.sort((lab1, lab2) => (days.indexOf(lab1.labDay) < days.indexOf(lab2.labDay) ? -1 : 1));
+    labs.sort((lab1, lab2) => lab1.labDay !== lab2.labDay ? 1 : this.sortByTime(lab1.startTime, lab2.startTime));
+  }
+
+  sortByTime(lab1: number, lab2: number) {
+    return lab1 < lab2 ? -1 : 1;
   }
 
   incomingfile(event: Event) {
@@ -97,28 +107,35 @@ export class UploadStudentComponent implements OnInit {
       var workbook = XLSX.read(bstr, {type: "binary"});
       var first_sheet_name = workbook.SheetNames[0];
       var worksheet = workbook.Sheets[first_sheet_name];
-      result = XLSX.utils.sheet_to_json(worksheet, {raw: true});
-      console.log(XLSX.utils.sheet_to_json(worksheet, {raw: true}));
-      console.log(result[0]);
+      result = XLSX.utils.sheet_to_csv(worksheet);
+      let final_result = result.split('\n');
       this.lab = this.studentForm.controls.lab.value;
-      // this.displayedColumns = ["person.email", "lab.class.classId", "lab.startTime", "lab.endTime"];
       if (!!result) {
-        this.uploadStudentService.uploadList(result, this.lab).subscribe((data) => {
-          // this.demoTable = new MatTableDataSource(data);
-          // this.demoTable.sort = this.sort;
-        });
+        this.uploadStudentService.uploadList(final_result, this.lab).then(
+          res => {
+            this.snackBar.open('Upload successful!' , 'Close' , {
+              duration: 10000,
+              panelClass: ['success-snackbar']
+            });
+            this.studentForm.reset();
+          }).catch( res =>
+          console.log("sorry something went wrong")
+        );
       }
       console.log("type " + typeof (result));
     }
     fileReader.readAsArrayBuffer(this.fileToUpload);
   }
 
-  formUpload() {
+  formUpload(type: string) {
     this.lab = this.studentForm.controls.lab.value;
     this.email = this.studentForm.controls.email.value;
-    this.uploadStudentService.assignToLab(this.lab, this.email).then(
+    this.uploadStudentService.assignToLab(this.lab, this.email, type).then(
       res => {
-        this.successMsg = true;
+        this.snackBar.open('Upload successful!' , 'Close' , {
+          duration: 10000,
+          panelClass: ['success-snackbar']
+        });
         this.studentForm.reset();
       }).catch( res =>
         console.log("sorry something went wrong")
@@ -137,7 +154,12 @@ export class UploadStudentComponent implements OnInit {
     this.lab.room = this.labForm.controls.room.value;
     this.lab.labClass = this.class;
 
-    this.uploadStudentService.addNewLab(this.lab, this.class, username);
+    this.uploadStudentService.addNewLab(this.lab, this.class, username).then( res => {
+      this.snackBar.open('Lab created!' , 'Close' , {
+        duration: 10000,
+        panelClass: ['success-snackbar']
+      });
+    });
   }
 
   filterLabs(lab: Lab, event: any) {

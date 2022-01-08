@@ -75,6 +75,8 @@ body, html {
   border-radius: 20px;
   margin-top: 2vh;
   margin-bottom: 2vh;
+  max-height: 30vh;
+  overflow-y: scroll;
 }
 
 .no-lab {
@@ -112,6 +114,8 @@ body, html {
   margin-left: 30vw;
   border-radius: 8px;
   border: 5px solid #0b5697;
+  max-height: 40vh;
+  overflow-y: scroll;
 }
 
 .mat-table {

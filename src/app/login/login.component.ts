@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Login} from './login'
 import {LoginService} from "./login.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 // import {AppService} from "../app.service";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class LoginComponent implements OnInit {
 
@@ -32,7 +34,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private loginService: LoginService,
-    private http: HttpClient
+    private snackBar: MatSnackBar
   ) {
 
   }
@@ -77,6 +79,11 @@ export class LoginComponent implements OnInit {
           this.router.navigate(["/lab"]);
         }
       } else {
+        // this.snackBar.open('Invalid username or password. Please, try again.');
+        this.snackBar.open('Invalid username or password. Please, try again.' , 'Close' , {
+          duration: 10000,
+          panelClass: ['login-snackbar']
+        });
         this.showErrorMsg = true;
       }
 

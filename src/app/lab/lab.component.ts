@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Lab, Demo, Grade} from "./lab";
+import {Lab, Demo, Grade, Person} from "./lab";
 import {LabService} from "./lab.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
@@ -28,6 +28,7 @@ export class LabComponent implements OnInit {
   currentMinutes: any;
   todaysLabs: Lab[];
   labs: Lab[];
+  user: Person;
   currentLab: Lab;
   nextLabs: Lab[];
   nextLab: Lab;
@@ -74,19 +75,21 @@ export class LabComponent implements OnInit {
     this.labService.getLab(this.role).subscribe((data) => {
       this.pageLoaded = true;
       this.labs = data;
-      this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
+      // this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
+      this.sortLabs(this.labs);
 
       this.getName();
       this.interHandle = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
-      }, 1000);
+      }, 5000);
     });
   }
 
   getName() {
   this.labService.getName(this.username).subscribe((data) =>
   {
+    this.user = data;
     this.firstName = data.firstName;
   })
   }
@@ -94,25 +97,25 @@ export class LabComponent implements OnInit {
   getDate() {
     switch (new Date().getDay()) {
       case 1:
-        this.todaysDate = "monday";
+        this.todaysDate = "Monday";
         break;
       case 2:
-        this.todaysDate = "tuesday";
+        this.todaysDate = "Tuesday";
         break;
       case 3:
-        this.todaysDate = "wednesday";
+        this.todaysDate = "Wednesday";
         break;
       case 4:
-        this.todaysDate = "thursday";
+        this.todaysDate = "Thursday";
         break;
       case 5:
-        this.todaysDate = "friday";
+        this.todaysDate = "Friday";
         break;
       case 0:
-        this.todaysDate = "sunday";
+        this.todaysDate = "Sunday";
         break;
       case 6:
-        this.todaysDate = "saturday";
+        this.todaysDate = "Saturday";
         break;
     }
     this.currentHour = new Date().getHours().toString();
@@ -132,15 +135,17 @@ export class LabComponent implements OnInit {
   }
 
   getNextLabs() {
+    if (this.todaysLabs.length === 0) {
+      this.currentLab = new Lab();
+    }
+    console.log(this.currentLab);
     this.todaysLabs.forEach((element) => {
-      // this.labTime = +(element.labDay.replace(':', ''));
       if (this.currentTime >= element.startTime && this.currentTime <= element.endTime) {
         this.currentLab = element;
       } else if (this.currentTime < element.startTime) {
         this.nextLabs.push(element);
         this.nextLabs.sort((n1, n2) => n1.startTime - n2.startTime);
         this.nextLab = this.nextLabs[0];
-        // console.log(this.nextLabs + " next one " + this.nextLab);
       }
     });
     this.showQueue();
@@ -206,11 +211,13 @@ export class LabComponent implements OnInit {
   }
 
   toggleTable(showQueue: boolean) {
+    console.log(this.demoQueue);
+    console.log(this.demoTable);
     if(showQueue) {
       this.interHandle = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
-      }, 1000);
+      }, 5000);
   } else {
       this.isDemo = false;
       clearInterval(this.interHandle);
@@ -264,6 +271,7 @@ export class LabComponent implements OnInit {
       if (!!data && new Date(data.gradeDate).getDay() === new Date().getDay() && new Date(data.gradeDate).getMonth() === new Date().getMonth()) {
         this.isGradeSet = true;
         this.studentGrades = data;
+        this.isDemo = false;
       }
     });
 
@@ -336,15 +344,27 @@ export class LabComponent implements OnInit {
   }
 
   switchInterface(role: string) {
+    localStorage.setItem('role', role);
+    clearInterval(this.interHandle);
     this.labService.getLab(role).subscribe((data) => {
       this.labs = data;
       this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
 
-      setInterval(() => {
+      this.interHandle = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
-      }, 1000);
+      }, 2000);
     });
+  }
+
+  sortLabs(labs: Lab[]) {
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    labs.sort((lab1, lab2) => (days.indexOf(lab1.labDay) < days.indexOf(lab2.labDay) ? -1 : 1));
+    labs.sort((lab1, lab2) => lab1.labDay !== lab2.labDay ? 1 : this.sortByTime(lab1.startTime, lab2.startTime));
+  }
+
+  sortByTime(lab1: number, lab2: number) {
+    return lab1 < lab2 ? -1 : 1;
   }
 
   logout() {

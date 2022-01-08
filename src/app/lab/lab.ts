@@ -35,6 +35,6 @@ export class Person {
   email: string;
   firstName:string;
   lastName:string;
+  role:string;
   userPassword:string;
-  roleType:string;
 }

@@ -15,17 +15,19 @@ export class UploadStudentService {
   constructor(private http: HttpClient) {
   }
 
-  uploadList(result: object, lab: Lab): Observable<Demo[]> {
+  uploadList(result: string[], lab: Lab) {
     const myHeaders = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': 'http://localhost:4200',
         "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
       })
     };
-    return this.http.post<Demo[]>("http://localhost:8080/lab/list/" + {lab}, result, myHeaders);
+    return this.http.post<any>("http://localhost:8080/lab/list/" + lab.labId, result, myHeaders).toPromise().then(response => {
+      console.log(response);
+    })
   }
 
-  assignToLab(lab: Lab, email: string) {
+  assignToLab(lab: Lab, email: string, type: string) {
     const myHeaders = {
       headers: new HttpHeaders({
         'Access-Control-Allow-Origin': 'http://localhost:4200',
@@ -33,7 +35,7 @@ export class UploadStudentService {
       })
     };
     // return this.http.post<Demo[]>("http://localhost:8080/lab/assign/" + {username}, lab, myHeaders);
-    return this.http.post<any>("http://localhost:8080/lab/assign/" + email, lab, myHeaders).toPromise().then(response => {
+    return this.http.post<any>("http://localhost:8080/lab/assign/" + email +'/'+ type, lab, myHeaders).toPromise().then(response => {
       console.log(response);
     })
   }

@@ -13,92 +13,58 @@
     </div>
   </div>
   <div class="my-tabs">
-<mat-tab-group>
-  <!--ADD LAB -->
-  <mat-tab label="Add lab">
-    <div ng-app="MyApp" ng-controller="AppCtrl" layout-margin layout-padding>
-      <form [formGroup]="labForm" class="form">
-        <mat-form-field appearance="fill">
-          <mat-label>Class ID</mat-label>
-          <input matInput formControlName="classId" placeholder="Example: CS407" required>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Class Name</mat-label>
-          <input matInput formControlName="className" placeholder="Example: Computer Security" required>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Lab day</mat-label>
-          <mat-select placeholder="Day" formControlName="labDay">
-            <mat-option value="monday">Monday</mat-option>
-            <mat-option value="tuesday">Tuesday</mat-option>
-            <mat-option value="wednesday">Wednesday</mat-option>
-            <mat-option value="thursday">Thursday</mat-option>
-            <mat-option value="friday">Friday</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Start time</mat-label>
-          <input matInput [ngxTimepicker]="startTime" [format]="24" formControlName="startTime" required>
-          <ngx-material-timepicker #startTime></ngx-material-timepicker>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>End time</mat-label>
-          <input matInput [ngxTimepicker]="endTime" [format]="24" formControlName="endTime" required>
-          <ngx-material-timepicker #endTime></ngx-material-timepicker>
-        </mat-form-field>
-        <mat-form-field appearance="fill">
-          <mat-label>Room</mat-label>
-          <input matInput formControlName="room" placeholder="Example: LT1105" required>
-        </mat-form-field>
-        <button type="button" mat-button mat-raised-button class="my-btn" (click)="labOnSubmit()" >ADD</button>
-      </form>
-    </div>
-  </mat-tab>
-  <!--ADD STUDENT/DEMONSTRATOR -->
+    <mat-tab-group>
+      <!--ADD LAB -->
+      <mat-tab label="Add lab">
+        <form [formGroup]="labForm" class="form">
+          <mat-form-field appearance="fill">
+            <mat-label>Class ID</mat-label>
+            <input matInput formControlName="classId" placeholder="Example: CS407" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Class Name</mat-label>
+            <input matInput formControlName="className" placeholder="Example: Computer Security" required>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Lab day</mat-label>
+            <mat-select placeholder="Day" formControlName="labDay">
+              <mat-option value="Monday">Monday</mat-option>
+              <mat-option value="Tuesday">Tuesday</mat-option>
+              <mat-option value="Wednesday">Wednesday</mat-option>
+              <mat-option value="Thursday">Thursday</mat-option>
+              <mat-option value="Friday">Friday</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Start time</mat-label>
+            <input matInput [ngxTimepicker]="startTime" [format]="24" formControlName="startTime" required>
+            <ngx-material-timepicker #startTime></ngx-material-timepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>End time</mat-label>
+            <input matInput [ngxTimepicker]="endTime" [format]="24" formControlName="endTime" required>
+            <ngx-material-timepicker #endTime></ngx-material-timepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Room</mat-label>
+            <input matInput formControlName="room" placeholder="Example: LT1105" required>
+          </mat-form-field>
+          <button type="button" mat-button mat-raised-button class="my-btn" (click)="labOnSubmit()">ADD</button>
+        </form>
+      </mat-tab>
+      <!--  ADD STUDENT/DEMONSTRATOR-->
 
-  <mat-tab label="Add student/demonstrator to lab">
-    <mat-accordion>
-      <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Add Student(s) to a lab
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <p>Please select a lab to add a student to and upload the student(s) email using the file or input option.</p>
-
-
+      <mat-tab label="Add student/demonstrator to lab">
         <mat-accordion>
           <mat-expansion-panel hideToggle>
             <mat-expansion-panel-header>
-              <mat-panel-title> Upload using .xlxs file
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-            <label>Please upload a .xlsx file containing student's emails only</label>
-            <form [formGroup]="studentForm" class="form">
-            <h4>My labs</h4>
-            <mat-form-field appearance="fill">
-              <mat-label>Select lab</mat-label>
-              <mat-select formControlName="lab" required>
-                <mat-option *ngFor="let lab of labList" [value]="lab">
-                  {{lab.labClass.classId}}
-                  {{lab.labClass.className}}
-                  {{lab.labDay}}
-                  {{lab.startTime}}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-        <input type="file" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
-        <button type="button" mat-button mat-raised-button class="my-btn" (click)="fileUpload()" >UPLOAD</button>
-            </form>
-
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-          <mat-expansion-panel-header>
-            <mat-panel-title> Upload using the student's email
+              <mat-panel-title>
+                Add Student(s) to a lab
               </mat-panel-title>
-          </mat-expansion-panel-header>
+            </mat-expansion-panel-header>
+            <p>Please select a lab to add a student to and upload the student(s) email using the file or input
+              option.</p>
             <form [formGroup]="studentForm" class="form">
-              <h4>My labs</h4>
               <mat-form-field appearance="fill">
                 <mat-label>Select lab</mat-label>
                 <mat-select formControlName="lab" required>
@@ -110,33 +76,63 @@
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Student email</mat-label>
-            <input matInput formControlName="email" placeholder="email" required>
-          </mat-form-field>
-              <button type="button" mat-button mat-raised-button class="my-btn" (click)="formUpload()" >UPLOAD</button>
-        </form>
+              <mat-card>
+                  <label class="upload">Please upload a .xlsx file containing student's emails only</label><br>
+                <input type="file" (change)="incomingfile($event)" placeholder="Upload file" accept=".xlsx">
+                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="fileUpload()">UPLOAD</button>
+              </mat-card>
+
+
+              <mat-card>
+                <label class="upload">Upload using the student's email</label><br>
+                <mat-form-field appearance="fill">
+                  <mat-label>Student email</mat-label>
+                  <input matInput formControlName="email" placeholder="email" required>
+                </mat-form-field>
+                <button type="button" mat-button mat-raised-button class="upload-btn" (click)="formUpload('student')">UPLOAD</button>
+
+              </mat-card>
+
+            </form>
+          </mat-expansion-panel>
+
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Assign Demonstrator(s) to a lab
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="studentForm" class="form">
+              <mat-form-field appearance="fill">
+                <mat-label>Select lab</mat-label>
+                <mat-select formControlName="lab" required>
+                  <mat-option *ngFor="let lab of labList" [value]="lab">
+                    {{lab.labClass.classId}}
+                    {{lab.labClass.className}}
+                    {{lab.labDay}}
+                    {{lab.startTime}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill">
+                <mat-label>Demonstrator email</mat-label>
+                <input matInput formControlName="email" placeholder="email" required>
+              </mat-form-field>
+              <button type="button" mat-button mat-raised-button class="upload-btn" (click)="formUpload('demonstrator')">SUBMIT</button>
+              </form>
           </mat-expansion-panel>
         </mat-accordion>
+      </mat-tab>
 
-      </mat-expansion-panel>
+      <!--SHOW STATISTICS -->
 
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Assign Demonstrator(s) to a lab
-          </mat-panel-title>
-          <!--        <mat-panel-description>-->
-          <!--          Currently I am -->
-          <!--        </mat-panel-description>-->
-        </mat-expansion-panel-header>
-        <h4>My labs</h4>
-        <form [formGroup]="studentForm" class="form">
+      <mat-tab label="Statistic">
         <mat-form-field appearance="fill">
           <mat-label>Select lab</mat-label>
-          <mat-select formControlName="lab" required>
-            <mat-option *ngFor="let lab of labList" [value]="lab">
+<!--          <mat-select formControlName="lab" required>-->
+          <mat-select required>
+            <mat-option (onSelectionChange)="filterLabs(lab, $event)" *ngFor="let lab of labList" [value]="lab">
               {{lab.labClass.classId}}
               {{lab.labClass.className}}
               {{lab.labDay}}
@@ -144,78 +140,55 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-          <mat-form-field appearance="fill">
-            <mat-label>Demonstrator email</mat-label>
-            <input matInput formControlName="email" placeholder="email" required>
-          </mat-form-field>
-          <button type="button" mat-button mat-raised-button class="my-btn" (click)="formUpload()" >SUBMIT</button>
-          <mat-label *ngIf="successMsg">Demonstrator assigned successfully!</mat-label>
-        </form>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </mat-tab>
-
-  <!--SHOW STATISTICS -->
-  <mat-tab label="Statistic">
-<!--    <form [formGroup]="labForm" class="form">-->
-  <mat-form-field appearance="fill">
-    <mat-label>Select lab</mat-label>
-    <mat-select formControlName="lab" required>
-      <mat-option (onSelectionChange)="filterLabs(lab, $event)" *ngFor="let lab of labList" [value]="lab">
-        {{lab.labClass.classId}}
-        {{lab.labClass.className}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-<!--    </form>-->
-    <mat-form-field appearance="fill">
-      <mat-label>Select date</mat-label>
-      <mat-select required>
-        <mat-option (onSelectionChange)="getLabStats(date, $event)" *ngFor="let date of labDate" [value]="date">
-          {{date}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Select date</mat-label>
+          <mat-select required>
+            <mat-option (onSelectionChange)="getLabStats(date, $event)" *ngFor="let date of labDate" [value]="date">
+              {{date}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
 
-    <div class="stat-table" *ngIf="statTable != null">
-      <table mat-table [dataSource]="statTable" matSort matSortDirection="asc" multiTemplateDataRows>
-        <ng-container matColumnDef="Student">
-          <th mat-header-cell *matHeaderCellDef> Student </th>
-          <td mat-cell *matCellDef="let stats"> {{stats.demo.person.firstName + " " + stats.demo.person.lastName}} </td>
-          <td mat-footer-cell *matFooterCellDef class="avg-wait-time-header"><b>Average Waiting Time</b> </td>
-        </ng-container>
-        <ng-container matColumnDef="JoinTime">
-          <th mat-header-cell *matHeaderCellDef> Joining Time </th>
-          <td mat-cell *matCellDef="let stats"> {{stats.joinTime}} </td>
-          <td mat-footer-cell *matFooterCellDef>  </td>
-        </ng-container>
-        <ng-container matColumnDef="WaitingTime">
-          <th mat-header-cell *matHeaderCellDef>Total Waiting Time </th>
-          <td mat-cell *matCellDef="let stats"> {{stats.waitingTime}} </td>
-          <td mat-footer-cell *matFooterCellDef class="avg-wait-time-val"><b>{{avgWaitStr}}</b></td>
-        </ng-container>
-        <ng-container matColumnDef="TotalDemo">
-          <th mat-header-cell *matHeaderCellDef> Total Demonstration Time </th>
-          <td mat-cell *matCellDef="let stats"> {{stats.demoTime}} </td>
-          <td mat-footer-cell *matFooterCellDef>  </td>
-        </ng-container>
+        <div class="stat-table" *ngIf="statTable != null">
+          <table mat-table [dataSource]="statTable" matSort matSortDirection="asc" multiTemplateDataRows>
+            <ng-container matColumnDef="Student">
+              <th mat-header-cell *matHeaderCellDef> Student</th>
+              <td mat-cell
+                  *matCellDef="let stats"> {{stats.demo.person.firstName + " " + stats.demo.person.lastName}} </td>
+              <td mat-footer-cell *matFooterCellDef class="avg-wait-time-header"><b>Average Waiting Time</b></td>
+            </ng-container>
+            <ng-container matColumnDef="JoinTime">
+              <th mat-header-cell *matHeaderCellDef> Joining Time</th>
+              <td mat-cell *matCellDef="let stats"> {{stats.joinTime}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="WaitingTime">
+              <th mat-header-cell *matHeaderCellDef>Total Waiting Time</th>
+              <td mat-cell *matCellDef="let stats"> {{stats.waitingTime}} </td>
+              <td mat-footer-cell *matFooterCellDef class="avg-wait-time-val"><b>{{avgWaitStr}}</b></td>
+            </ng-container>
+            <ng-container matColumnDef="TotalDemo">
+              <th mat-header-cell *matHeaderCellDef> Total Demonstration Time</th>
+              <td mat-cell *matCellDef="let stats"> {{stats.demoTime}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
 
-        <ng-container matColumnDef="avgDemoHeader" class="avg-demo-cell">
-          <td mat-footer-cell *matFooterCellDef [colSpan]="3"><b>Average Demonstration Time</b></td>
-        </ng-container>
-        <ng-container matColumnDef="avgDemo">
-          <td mat-footer-cell *matFooterCellDef><b>{{avgDemoStr}}</b></td>
-        </ng-container>
+            <ng-container matColumnDef="avgDemoHeader" class="avg-demo-cell">
+              <td mat-footer-cell *matFooterCellDef [colSpan]="3"><b>Average Demonstration Time</b></td>
+            </ng-container>
+            <ng-container matColumnDef="avgDemo">
+              <td mat-footer-cell *matFooterCellDef><b>{{avgDemoStr}}</b></td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumns" class="nettoRow"></tr>
-        <tr mat-footer-row *matFooterRowDef="avgDemoFooter" class="nettoRow"></tr>
-      </table>
-    </div>
-  </mat-tab>
-</mat-tab-group>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns" class="nettoRow"></tr>
+            <tr mat-footer-row *matFooterRowDef="avgDemoFooter" class="nettoRow"></tr>
+          </table>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>
 

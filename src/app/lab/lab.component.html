@@ -8,8 +8,8 @@
     </button>
     <div class="demo-menu">
     <mat-menu class="my-menu" #menu="matMenu">
-      <button mat-menu-item *ngIf="role === 'demonstrator'" class="demonstrator-btn" (click)="switchInterface('student')">Student Mode</button>
-      <button mat-menu-item *ngIf="role === 'demonstrator'" class="demonstrator-btn" (click)="switchInterface('demonstrator')">Demonstrator Mode</button>
+      <button mat-menu-item *ngIf="user.role === 'demonstrator'" class="demonstrator-btn" (click)="switchInterface('student')">Student Mode</button>
+      <button mat-menu-item *ngIf="user.role === 'demonstrator'" class="demonstrator-btn" (click)="switchInterface('demonstrator')">Demonstrator Mode</button>
       <button mat-menu-item *ngIf="role === 'lecturer'" class="demonstrator-btn" [routerLink]="'/upload'">Lecturer Interface</button>
       <button mat-menu-item (click)="logout()">Logout</button>
     </mat-menu>
@@ -19,13 +19,13 @@
 <!--      <div class="current-lab">-->
         <label class="current-lab-label">Current lab:</label>
         <div class="current-lab-obj">
-          <div *ngIf="currentLab !== undefined">
+          <div *ngIf="currentLab !== undefined && currentLab.labDay">
           <label> {{currentLab.labClass.classId}}<br></label>
           <label><b> {{currentLab.labClass.className}} </b><br></label>
           <!--    <label *ngIf="currentLab !== undefined"> {{currentLab.startTime}}</label>-->
           <label> until {{currentLab.endTime}}</label>
           </div>
-          <div *ngIf="currentLab === undefined" class="no-lab">
+          <div *ngIf="currentLab || currentLab === undefined " class="no-lab">
             <label>No lab currently running.<br></label>
             </div>
           <!--      <label *ngIf="currentLab !== undefined"> {{currentLab.labClass.classId}} {{currentLab.labClass.className}} until {{currentLab.endTime}}</label>-->
@@ -63,11 +63,11 @@
   </div>
   </mat-card>
 
-      <div class="demo-btn" *ngIf="currentLab != undefined">
+      <div class="demo-btn" *ngIf="currentLab != undefined && currentLab.labDay">
         <button class="demo-button" type="submit" *ngIf="!isDemo && !isGradeSet && role === 'student'"
                 (click)="demonstrate()">DEMONSTRATE
         </button>
-        <button class="demo-button" type="submit" *ngIf="!isDemo && role === 'lecturer' || role === 'demnstrator'"
+        <button class="demo-button" type="submit" *ngIf="!isDemo && demoQueue !== undefined && (role === 'lecturer' || role === 'demonstrator')"
                 (click)="toggleTable(true)">SHOW QUEUE
         </button>
         </div>

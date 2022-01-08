@@ -2,7 +2,6 @@ import {Injectable, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from "./header/header.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
@@ -17,7 +16,6 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {HomeComponent} from './home/home.component';
 import {LabComponent} from './lab/lab.component';
-import {DemonstratorComponent} from './demonstrator/demonstrator.component';
 import {MatTableModule} from "@angular/material/table";
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
@@ -36,6 +34,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatSortModule} from "@angular/material/sort";
 import {MatCardModule} from "@angular/material/card";
 import {MatMenuModule} from "@angular/material/menu";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 // @Injectable()
@@ -58,7 +57,6 @@ const routes: Routes = [
   {path: 'home', component: HomeComponent},
   {path: 'student', component: StudentComponent},
   {path: 'lab', component: LabComponent},
-  {path: 'admin', component: DemonstratorComponent},
   {path: 'grade', component: GradeComponent},
   {path: 'upload', component: UploadStudentComponent}
 ];
@@ -67,14 +65,12 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     HeaderComponent,
-    DashboardComponent,
     StudentComponent,
     UsersComponent,
     LoginComponent,
     HomeComponent,
     StudentComponent,
     LabComponent,
-    DemonstratorComponent,
     GradeComponent,
     UploadStudentComponent,
     StatisticComponent
@@ -111,7 +107,7 @@ const routes: Routes = [
     ModalModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent]
 })
 export class AppModule {
