@@ -1,6 +1,10 @@
-<div class="container">
+<div *ngIf="!isGraph" class="container">
   <div class="header">
-    <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="70vh">
+    <div class="logo-box">
+      <a [routerLink]="'/lab'">
+    <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="85vh" class="logo">
+      </a>
+    </div>
     <span class="user"> Hello, {{firstName}}!</span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>settings</mat-icon>
@@ -13,7 +17,7 @@
     </div>
   </div>
   <div class="my-tabs">
-    <mat-tab-group>
+    <mat-tab-group [selectedIndex]="3">
       <!--ADD LAB -->
       <mat-tab label="Add lab">
         <form [formGroup]="labForm" class="form">
@@ -82,7 +86,6 @@
                 <button type="button" mat-button mat-raised-button class="upload-btn" (click)="fileUpload()">UPLOAD
                 </button>
               </mat-card>
-
 
               <mat-card>
                 <label class="upload">Upload using the student's email</label><br>
@@ -183,13 +186,50 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; let even = even;
+              columns: displayedColumns;"
+                [ngClass]="{gray: even}"> </tr>
             <tr mat-footer-row *matFooterRowDef="displayedColumns" class="nettoRow"></tr>
             <tr mat-footer-row *matFooterRowDef="avgDemoFooter" class="nettoRow"></tr>
           </table>
         </div>
+
+        <button type="button" mat-button mat-raised-button class="upload-btn"
+                (click)="showGraph(true)">SHOW GRAPH
+        </button>
+
       </mat-tab>
     </mat-tab-group>
   </div>
-</div>
 
+</div>
+<div *ngIf="isGraph" class="second-window">
+  <div *ngIf="isGraph" style="display: block" class="graph">
+    <button type="button" mat-button mat-raised-button class="upload-btn"
+            (click)="showGraph(false)">HIDE GRAPH
+    </button>
+    <div class="graph1">
+    <canvas  baseChart
+             height="100vh" width="180vw"
+            [datasets]="demoLineChartData"
+            [labels]="demoLineChartLabels"
+            [options]="demoLineChartOptions"
+            [colors]="demoLineChartColors"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            [plugins]="lineChartPlugins">
+    </canvas>
+    </div>
+    <div class="graph2">
+    <canvas baseChart
+            [datasets]="waitLineChartData"
+            [labels]="waitLineChartLabels"
+            [options]="waitLineChartOptions"
+            [colors]="waitLineChartColors"
+            [legend]="lineChartLegend"
+            [chartType]="lineChartType"
+            [plugins]="lineChartPlugins">
+    </canvas>
+    </div>
+  </div>
+</div>

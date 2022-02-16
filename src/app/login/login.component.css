@@ -116,14 +116,14 @@ input:-moz-placeholder { color: #adadad;}
 input::-moz-placeholder { color: #adadad;}
 input:-ms-input-placeholder { color: #adadad;}
 
-.label-input100 {
+.input-label {
   font-family: Helvetica, sans-serif;
   font-size: 1em;
   line-height: 1.5;
   padding-left: 7px;
 }
 
-.input100 {
+.input {
   font-family: Helvetica, sans-serif;
   font-size: 16px;
   color: #333333;

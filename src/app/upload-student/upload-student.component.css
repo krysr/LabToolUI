@@ -1,4 +1,3 @@
-
 body, html {
   height: 100vh;
   margin: 0 !important;
@@ -25,24 +24,52 @@ body, html {
   position: relative;
 }
 
+.second-window {
+  width: 55vw;
+  height: 83vh;
+  margin-left: 20vw;
+  margin-top: 5vh;
+  border-style: solid;
+  border-color: #ffffff;
+  border-radius: 20px;
+  padding-top: 3vh;
+  padding-left:3vh;
+  padding-right: 3vh;
+  background: #fff;
+  position: relative !important;
+}
+
 .header {
   margin-top: 0;
+  display: flex !important;
+  width: 100%;
+  margin-right: 0 !important;
 }
 
 .mat-icon {
-  color: #B4B8B8;
-  transform: scale(3);
-  display: flex !important;
-  /*margin-left: 16vw;*/
+  color: #999999;
+  transform: scale(3.5);
+  padding-top: 25%;
+  /*padding-left: 100%;*/
+  margin-right: 0 !important;
+  /*margin-left: 15vw;*/
+  width: 15%;
+}
+
+.logo {
+  padding-left: 1%;
+  margin: 0 !important;
+}
+
+.logo-box {
+  width: 40%;
 }
 
 .user {
-  color: #B4B8B8;
-  margin-left: 17vw;
-  /*margin-right: 15vw;*/
+  color: #999999;
   font-size: 2em;
-  padding: 0;
-  margin-right: 13vw
+  padding-top: 2%;
+  width:50%;
 }
 
 .mat-menu-item {
@@ -78,8 +105,8 @@ mat-panel-title {
 .mat-table {
   width: 100%;
   overflow:hidden !important;
-  /*overflow-x: scroll;*/
 }
+
 
 .stat-table {
   display: block;
@@ -87,6 +114,14 @@ mat-panel-title {
   max-height: 40vh;
   overflow-y: scroll;
 }
+
+canvas {
+  height: 35vh !important;
+  width: 50vw !important;
+  padding-top: 3%;
+}
+.gray { background-color: #f5f5f5 }
+
 .my-btn {
   font-family: Helvetica, sans-serif;
   font-size: 25px;

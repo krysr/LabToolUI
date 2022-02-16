@@ -19,7 +19,6 @@ export class LabComponent implements OnInit {
   username: string | null;
   demoQueue: Demo[];
   studentGrade: Grade = new Grade();
-  testString: boolean;
   todaysDate: string;
   currentTime: number;
   currentHour: string;
@@ -31,7 +30,9 @@ export class LabComponent implements OnInit {
   nextLabs: Lab[];
   nextLab: Lab;
   demoTable: MatTableDataSource<Demo>;
+  labTable: MatTableDataSource<Lab>;
   displayedColumns: string[];
+  labListColumns: string[];
   isDemo: boolean = false;
   role: string;
   currentStudentDemo: Demo;
@@ -39,16 +40,8 @@ export class LabComponent implements OnInit {
   lab: Lab;
   studentGrades: Grade;
   isGradeSet: boolean;
-  pageLoaded: boolean;
-  isAccepted: boolean;
-  mm = 0;
-  ss = 0;
-  ms = 0;
-  isRunning = false;
-  timerId = 0;
   isFirstPos: Demo | undefined;
   studentName: string;
-  isAvailable: boolean = true;
   demoStartTime: Date;
   demoEndTime: Date;
   waitingTime: number;
@@ -63,16 +56,14 @@ export class LabComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.isAccepted = false;
-    this.pageLoaded = false;
     this.username = localStorage.getItem('username');
     // @ts-ignore
     this.role = localStorage.getItem('role');
     this.isDemo = false;
-
+    this.labListColumns = ["classId", "className", "labDay", "startTime", "endTime", "room"];
     this.labService.getLab(this.role).subscribe((data) => {
-      this.pageLoaded = true;
       this.labs = data;
+      this.labTable = new MatTableDataSource(this.labs);
       this.sortLabs(this.labs);
       this.getName();
       this.interHandle = setInterval(() => {
@@ -152,7 +143,6 @@ export class LabComponent implements OnInit {
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "button"];
     this.labService.addDemonstrate(this.currentLab).subscribe((data) => {
     });
-    this.startTimer(false);
   }
 
   stopDemo(row: Demo) {
@@ -160,13 +150,12 @@ export class LabComponent implements OnInit {
     this.isDemo = false;
     this.labService.removeDemonstrate(row).subscribe((data) => {
     });
-    this.startTimer(false);
   }
 
   showQueue() {
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
-    this.displayedColumns = ["num", "person.firstName", "person.lastName", "instructorBtn", "liveDemo", "exit"];
+    this.displayedColumns = ["num", "person.firstName", "person.lastName", "seat", "instructorBtn", "leaveBtn", "liveDemo", "exit"];
     if (!!this.currentLab) {
       this.labService.getQueue(this.currentLab).subscribe((data) => {
         data.forEach(demo => {
@@ -192,7 +181,7 @@ export class LabComponent implements OnInit {
       this.interHandle = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
-      }, 2000);
+      }, 1000);
     } else {
       this.isDemo = false;
       clearInterval(this.interHandle);
@@ -210,7 +199,6 @@ export class LabComponent implements OnInit {
     dialogConfig.data = {
       row
     };
-    this.testString = true;
     const dialogRef = this.dialog.open(GradeComponent, {
       width: '600px',
       height: '600px',
@@ -223,9 +211,8 @@ export class LabComponent implements OnInit {
       this.studentGrade.gradeComment = result.comment;
       this.studentGrade.gradeDate = studentDate;
       this.studentGrade.demo = row;
-      this.isAvailable = true;
       if (!!this.studentGrade) {
-        this.labService.addGrade(this.studentGrade).subscribe((data) => {
+        this.labService.addGrade(this.studentGrade).then(result => {
         });
       }
     });
@@ -235,7 +222,7 @@ export class LabComponent implements OnInit {
   getGrade(username: string | null) {
     // @ts-ignore
     this.labService.getGrade(username, this.currentLab.labId).subscribe((data) => {
-      if (!!data && new Date(data.gradeDate).getDay() === new Date().getDay() && new Date(data.gradeDate).getMonth() === new Date().getMonth()) {
+      if (!!data && new Date(data.gradeDate).getDate() === new Date().getDate() && new Date(data.gradeDate).getMonth() === new Date().getMonth()) {
         this.isGradeSet = true;
         this.studentGrades = data;
         this.isDemo = false;
@@ -248,38 +235,9 @@ export class LabComponent implements OnInit {
     this.waitingTime = (new Date).getTime();
     this.currentStudentDemo = row;
     this.studentName = this.currentStudentDemo.person.dsUsername;
-    this.isAvailable = false;
     row.demo = 'live';
     this.labService.removeDemonstrate(row).subscribe((data) => {
     });
-  }
-
-  startTimer(inDemo: boolean) {
-    this.isAccepted = true;
-    if (!this.isRunning) {
-      this.timerId = setInterval(() => {
-        this.ms++;
-
-        if (this.ms >= 100) {
-          this.ss++;
-          this.ms = 0;
-        }
-        if (this.ss >= 60) {
-          this.mm++;
-          this.ss = 0
-        }
-      }, 10);
-    } else {
-      clearInterval(this.timerId);
-      this.ss = 0;
-      this.mm = 0;
-      this.ms = 0;
-    }
-    this.isRunning = !this.isRunning;
-  }
-
-  format(num: number) {
-    return (num + '').length === 1 ? '0' + num : num + '';
   }
 
   addStats(demo: Demo) {

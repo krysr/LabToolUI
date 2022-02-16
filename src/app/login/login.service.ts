@@ -19,7 +19,6 @@ export class LoginService {
     const myHeaders = { headers: new HttpHeaders( { 'Access-Control-Allow-Origin': 'http://localhost:4200',
       "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS",
       authorization : 'Basic ' + this.auth64})};
-
     return this.http.post<Login>(this.loginUrl, null, myHeaders);
   }
 }

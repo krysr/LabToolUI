@@ -1,17 +1,17 @@
 <body>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
-  <div class="wrap-login100">
+  <div class="container">
     <img src="../../assets/logo.png" alt="Lab Assistant" width="180vw" height="320vh" class="logo">
     <span class="form-title">Login</span>
     <div class="card-input">
-      <span class="label-input100">Username</span>
-      <input matInput class="input100" id="username" type="text" formControlName="username"
+      <span class="input-label">Username</span>
+      <input matInput class="input" id="username" type="text" formControlName="username"
              placeholder="Type your username" required>
     </div>
     <div class="card-input" data-validate="Password is required">
-      <span class="label-input100">Password</span>
+      <span class="input-label">Password</span>
       <div class="password-box">
-        <input matInput class="input100" id="password" type="password"
+        <input matInput class="input" id="password" type="password"
                [type]="fieldTextType ? 'text' : 'password'"
                formControlName="password" placeholder="Type your password" required/>
         <span class="fa fa-fw field-icon toggle-password"

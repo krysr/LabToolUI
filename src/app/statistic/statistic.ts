@@ -1,4 +1,4 @@
-import {Demo} from "../lab/lab";
+import { Demo } from "../lab/lab";
 
 export class Statistic {
   statId: number;

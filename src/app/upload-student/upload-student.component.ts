@@ -1,14 +1,16 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import * as XLSX from 'ts-xlsx';
-import {Class, Demo, Lab} from "../lab/lab";
+import {Class, Lab} from "../lab/lab";
 import {LabService} from "../lab/lab.service";
 import {UploadStudentService} from "./upload-student.service";
 import {MatTableDataSource} from "@angular/material/table";
-import {MatSort, Sort} from "@angular/material/sort";
+import {MatSort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StatCollection, Statistic} from "../statistic/statistic";
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ChartOptions, ChartDataSets, ChartType} from 'chart.js';
+import {Label, Color} from "ng2-charts";
 
 @Component({
   selector: 'app-upload-student',
@@ -17,13 +19,12 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 })
 export class UploadStudentComponent implements OnInit {
 
+  @Input() selectedIndex: number | null;
+
   fileToUpload: File;
   arrayBuffer: any;
-  demoTable: MatTableDataSource<Demo>;
   displayedColumns: string[];
   avgDemoFooter: string[];
-  dateColumn: string;
-  selectRole: string;
   labForm: FormGroup;
   studentForm: FormGroup;
   lab: Lab;
@@ -38,6 +39,110 @@ export class UploadStudentComponent implements OnInit {
   avgWaitStr: string;
   avgDemoStr: string;
   firstName: string;
+  isGraph: boolean;
+  demoGraph: Map<number, number> = new Map();
+  waitGraph: Map<number, number> = new Map();
+
+  // Graph data below
+
+  /** Queue graph **/
+  waitLineChartData: ChartDataSets[] = [
+    {data: [], label: 'Waiting Time By Number Of Students'},
+  ];
+
+  waitLineChartLabels: Label[];
+  waitLineChartOptions: ChartOptions = {
+    responsive: true,
+    title: {
+      display: true,
+      fullWidth: true,
+      fontSize: 30,
+      text: 'Waiting Time By Number Of Students'
+    },
+    scales: {
+      yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Number of Students',
+          fontSize: 20,
+        },
+        ticks: {
+          fontSize: 30,
+          stepSize: 1,
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Minutes',
+          fontSize: 20,
+        },
+        ticks: {
+          fontSize: 25
+        }
+      }],
+    }
+  };
+
+  waitLineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: '#7CE7FA',
+    },
+  ];
+
+  /** Demo graph **/
+  demoLineChartData: ChartDataSets[] = [
+    {data: [], label: 'Demonstration Time By Number Of Students'},
+  ];
+
+  demoLineChartLabels: Label[];
+
+  demoLineChartOptions: ChartOptions = {
+    responsive: true,
+    title: {
+      display: true,
+      fullWidth: true,
+      fontSize: 30,
+      text: 'Demonstration Time By Number Of Students'
+    },
+    scales: {
+      yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Number of Students',
+          fontSize: 20,
+        },
+        ticks: {
+          fontSize: 30,
+          stepSize: 1,
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'Minutes',
+          fontSize: 20,
+        },
+        ticks: {
+          fontSize: 25
+        }
+      }],
+    }
+  };
+
+  demoLineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: '#0b5697',
+    },
+  ];
+
+  lineChartLegend = false;
+  lineChartPlugins = [];
+  lineChartType: ChartType = 'line';
 
 
   @ViewChild(MatSort) sort: MatSort;
@@ -50,8 +155,7 @@ export class UploadStudentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.labService.getName(localStorage.getItem('username')).subscribe((data) =>
-    {
+    this.labService.getName(localStorage.getItem('username')).subscribe((data) => {
       this.firstName = data.firstName;
     })
     this.getLabs();
@@ -87,11 +191,13 @@ export class UploadStudentComponent implements OnInit {
     return lab1 < lab2 ? -1 : 1;
   }
 
+  /** Source: https://stackoverflow.com/questions/47151035/angular-4-how-to-read-data-from-excel by: Prabhu Anand **/
   incomingfile(event: Event) {
     // @ts-ignore
     this.fileToUpload = event.target.files[0];
   }
 
+  /** Source: https://stackoverflow.com/questions/47151035/angular-4-how-to-read-data-from-excel by: Prabhu Anand **/
   fileUpload() {
     this.lab = new Lab();
     let result;
@@ -111,13 +217,13 @@ export class UploadStudentComponent implements OnInit {
       if (!!result) {
         this.uploadStudentService.uploadList(final_result, this.lab).then(
           res => {
-            this.snackBar.open('Upload successful!' , 'Close' , {
+            this.snackBar.open('Upload successful!', 'Close', {
               duration: 10000,
               panelClass: ['success-snackbar']
             });
             this.studentForm.reset();
-          }).catch( res =>
-          console.log("sorry something went wrong")
+          }).catch(res =>
+          console.log("Sorry, something went wrong")
         );
       }
     }
@@ -129,13 +235,13 @@ export class UploadStudentComponent implements OnInit {
     this.email = this.studentForm.controls.email.value;
     this.uploadStudentService.assignToLab(this.lab, this.email, type).then(
       res => {
-        this.snackBar.open('Upload successful!' , 'Close' , {
+        this.snackBar.open('Upload successful!', 'Close', {
           duration: 10000,
           panelClass: ['success-snackbar']
         });
         this.studentForm.reset();
-      }).catch( res =>
-        console.log("sorry something went wrong")
+      }).catch(res =>
+      console.log("Sorry, something went wrong")
     );
   }
 
@@ -151,8 +257,8 @@ export class UploadStudentComponent implements OnInit {
     this.lab.room = this.labForm.controls.room.value;
     this.lab.labClass = this.class;
 
-    this.uploadStudentService.addNewLab(this.lab, this.class, username).then( res => {
-      this.snackBar.open('Lab created!' , 'Close' , {
+    this.uploadStudentService.addNewLab(this.lab, this.class, username).then(res => {
+      this.snackBar.open('Lab created!', 'Close', {
         duration: 10000,
         panelClass: ['success-snackbar']
       });
@@ -161,6 +267,10 @@ export class UploadStudentComponent implements OnInit {
 
   filterLabs(lab: Lab, event: any) {
     if (event.isUserInput) {
+      this.demoGraph = new Map();
+      this.demoGraph.set(0, 0);
+      this.waitGraph = new Map();
+      this.waitGraph.set(0, 0);
       this.displayStats = [];
       this.avgDemoStr = '';
       this.avgWaitStr = '';
@@ -187,9 +297,9 @@ export class UploadStudentComponent implements OnInit {
       this.getAverage(this.filteredStats);
       this.filteredStats.forEach(key => {
         let myStats = new StatCollection;
-        let formatJoinTime = this.msToTime(new Date(key.joinTime).getTime());
-        let demoTime = this.msToTime(new Date(key.demoEndTime).getTime() - new Date(key.demoStartTime).getTime());
-        let waitingTime = this.msToTime(new Date(key.demoStartTime).getTime() - new Date(key.joinTime).getTime());
+        let formatJoinTime = this.msToTime(new Date(key.joinTime).getTime(), false, 2);
+        let demoTime = this.msToTime(new Date(key.demoEndTime).getTime() - new Date(key.demoStartTime).getTime(), true, 0);
+        let waitingTime = this.msToTime(new Date(key.demoStartTime).getTime() - new Date(key.joinTime).getTime(), true, 1);
         myStats.demo = key.demo;
         myStats.date = key.date;
         myStats.joinTime = formatJoinTime;
@@ -209,22 +319,67 @@ export class UploadStudentComponent implements OnInit {
       averageWait += new Date(val.demoStartTime).getTime() - new Date(val.joinTime).getTime();
       averageDemo += new Date(val.demoEndTime).getTime() - new Date(val.demoStartTime).getTime();
     })
-    this.avgWaitStr = this.msToTime(averageWait/filtered.length);
-    this.avgDemoStr = this.msToTime(averageDemo/filtered.length);
+    this.avgWaitStr = this.msToTime(averageWait / filtered.length, false, 2);
+    this.avgDemoStr = this.msToTime(averageDemo / filtered.length, false, 2);
   }
-
-  msToTime(time: number) {
-    let milliseconds = Math.floor((time % 1000) / 100);
+ /** Source: https://stackoverflow.com/questions/19700283/how-to-convert-time-in-milliseconds-to-hours-min-sec-format-in-javascript by: Dusht**/
+  msToTime(time: number, forGraph: boolean, option: number) {
     let seconds = Math.floor((time / 1000) % 60);
     let minutes = Math.floor((time / (1000 * 60)) % 60);
     let hours = Math.floor((time / (1000 * 60 * 60)) % 24);
 
     let hoursStr = (hours < 10) ? "0" + hours : hours;
-    let minutesStr = (minutes < 10) ? "0" + minutes : minutes;
+    let minutesStr = (minutes < 10) ? "0" + minutes : minutes.toString();
     let secondsStr = (seconds < 10) ? "0" + seconds : seconds;
 
-    return hoursStr + ":" + minutesStr + ":" + secondsStr;
+    if (forGraph) {
+      let newMinute: string;
+      if (minutesStr.charAt(0) === '0') {
+        newMinute = minutesStr.substring(1);
+      } else {
+        newMinute = minutesStr;
+      }
+      if (option === 1) {
+        if (hoursStr === '01' || hoursStr === '02') {
+          this.waitGraph.set(60, 0);
+        }
+        if (this.waitGraph.has(Number(newMinute))) {
+          // @ts-ignore
+          this.waitGraph.set(Number(newMinute), this.waitGraph.get(Number(newMinute)) + 1);
+        }
+        else {
+          this.waitGraph.set(Number(newMinute), 1);
+        }
+        this.waitGraph = new Map([...this.waitGraph].sort((a, b) => {return a[0] -b[0]}));
+        this.waitLineChartLabels = Array.from(this.waitGraph.keys()) as unknown as Label[];
+        this.waitLineChartData = [
+          {data: Array.from(this.waitGraph.values()), label: 'Demonstration Time By Number Of Students'},
+        ];
+      }
+      else if (option === 0) {
+        if (hoursStr === '01' || hoursStr === '02') {
+          this.demoGraph.set(60, 0);
+        }
+        if (this.demoGraph.has(Number(newMinute))) {
+          // @ts-ignore
+          this.demoGraph.set(Number(newMinute), this.demoGraph.get(Number(newMinute)) + 1);
+        }
+        else {
+          this.demoGraph.set(Number(newMinute), 1);
+        }
+        this.demoGraph = new Map([...this.demoGraph].sort((a, b) => {return a[0] -b[0]}));
 
+        this.demoLineChartLabels = Array.from(this.demoGraph.keys()) as unknown as Label[];
+        this.demoLineChartData = [
+          {data: Array.from(this.demoGraph.values()), label: 'Waiting Time By Number Of Students'},
+        ];
+      }
+    }
+    return hoursStr + ":" + minutesStr + ":" + secondsStr;
+  }
+
+  showGraph(graph: boolean) {
+    this.isGraph = graph;
   }
 
   logout() {

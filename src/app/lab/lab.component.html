@@ -4,7 +4,9 @@
   <!------------------- HEADER ------------------------>
 
   <div class="header">
-    <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="70vh">
+    <div class="logo-box">
+    <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="85vh" class="logo">
+    </div>
     <span class="user"> Hello, {{firstName}}!</span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>settings</mat-icon>
@@ -35,7 +37,7 @@
         <label><b> {{currentLab.labClass.className}} </b><br></label>
         <label> until {{currentLab.endTime}}</label>
       </div>
-      <div *ngIf="currentLab || currentLab === undefined " class="no-lab">
+      <div *ngIf="currentLab === undefined || currentLab.labId === undefined" class="no-lab">
         <label>No lab currently running.<br></label>
       </div>
     </div>
@@ -56,22 +58,47 @@
   </mat-card>
 
   <!------------------- LAB LIST CARD ------------------>
+    <mat-card class="lab-list">
+          <span class="label-lab"> Your labs: </span>
+  <div class="lab-table">
+  <table mat-table [dataSource]="labTable" class="mat-elevation-z8">
+  <ng-container matColumnDef="classId">
+    <th mat-header-cell *matHeaderCellDef> Class ID </th>
+    <td mat-cell *matCellDef="let element"> {{element.labClass.classId}} </td>
+  </ng-container>
 
-  <mat-card class="lab-list">
-    <span class="text-center"> Your labs: </span>
-    <div class="card-body">
-      <div *ngFor="let lab of labs">
-        <mat-list>
-          <mat-list-item>
-            {{ lab.labClass.classId}} |
-            {{ lab.labDay}} |
-            {{ lab.startTime}} |
-            {{ lab.room }}
-          </mat-list-item>
-        </mat-list>
-      </div>
-    </div>
-  </mat-card>
+    <ng-container matColumnDef="className">
+      <th mat-header-cell *matHeaderCellDef> Class Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.labClass.className}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="labDay">
+      <th mat-header-cell *matHeaderCellDef> Day </th>
+      <td mat-cell *matCellDef="let element"> {{element.labDay}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef> Start Time </th>
+      <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endTime">
+      <th mat-header-cell *matHeaderCellDef> End Time </th>
+      <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="room">
+      <th mat-header-cell *matHeaderCellDef> Room </th>
+      <td mat-cell *matCellDef="let element"> {{element.room}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="labListColumns"></tr>
+    <tr mat-row *matRowDef="let row; let even = even;
+              columns: labListColumns;"
+             [ngClass]="{gray: even}"> </tr>
+  </table>
+  </div>
+        </mat-card>
 
   <!------------------------ QUEUE CARD ------------------->
 
@@ -106,16 +133,31 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let user"> {{user.person.lastName}} </td>
     </ng-container>
+    <ng-container matColumnDef="seat">
+      <th mat-header-cell *matHeaderCellDef>Seat</th>
+      <td mat-cell *matCellDef="let user"> <span *ngIf="(role === 'student' && username === user.person.dsUsername) || role !== 'student'">{{user.seat}} </span> </td>
+    </ng-container>
     <ng-container matColumnDef="instructorBtn">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element; let i=index;">
-        <button *ngIf="isFirstPos === element && role !== 'student' && element.demo === 'yes' && isAvailable"
+        <button *ngIf="role !== 'student' && element.demo === 'yes'"
                 mat-raised-button
-                (click)="acceptStudent(element)">Accept
+                (click)="acceptStudent(element)">ACCEPT
         </button>
-        <button *ngIf=" role !== 'student' && element.demo === 'live' && studentName === element.person.dsUsername"
+        <button *ngIf=" role !== 'student' && element.demo === 'live'"
                 mat-raised-button
-                (click)="addGrade(element)">Add Grade
+                (click)="addGrade(element)">MARK
+        </button>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="leaveBtn">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element; let i=index;">
+        <button mat-raised-button class="leave-btn" type="submit"
+                *ngIf="isDemo && role !== 'student'"
+                (click)="stopDemo(element)"><b>REMOVE</b>
         </button>
         <button mat-raised-button class="leave-btn" type="submit"
                 *ngIf="isDemo && role === 'student' && username === element.person.dsUsername"
@@ -128,8 +170,6 @@
       <th mat-header-cell *matHeaderCellDef> Status</th>
       <td mat-cell *matCellDef="let user">
         <span *ngIf="user.demo === 'live'" class="demo-label"> Currently demonstrating... </span>
-        <span *ngIf="user.demo === 'yes' && username === user.person.dsUsername">{{format(mm)}}:{{format(ss)}}
-          :{{format(ms)}}</span>
       </td>
     </ng-container>
 
@@ -144,7 +184,9 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; let even = even;
+              columns: displayedColumns;"
+        [ngClass]="{gray: even}"> </tr>
   </table>
 </div>
 </body>

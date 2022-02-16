@@ -1,7 +1,7 @@
-import {Observable} from "rxjs";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import { Observable } from "rxjs";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {Grade, Lab, Demo, Person} from "./lab";
+import { Grade, Lab, Demo, Person } from "./lab";
 
 @Injectable({
   providedIn: 'root'
@@ -27,68 +27,28 @@ export class LabService {
   }
 
   addDemonstrate(lab: Lab): Observable<Demo[]> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/" + this.username, lab, myHeaders);
+    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/" + this.username, lab);
   }
 
-
   removeDemonstrate(demo: Demo): Observable<Demo[]> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-
-    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/end/" + this.username, demo, myHeaders);
+    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/end/" + demo.person.dsUsername, demo);
   }
 
   getQueue(lab: Lab): Observable<Demo[]> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-
-    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/", lab, myHeaders);
+    return this.http.post<Demo[]>("http://localhost:8080/lab/demonstrate/", lab);
   }
 
-  addGrade(grade: Grade): Observable<Grade> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-    return this.http.post<Grade>("http://localhost:8080/grade/student/", grade, myHeaders);
+  addGrade(grade: Grade) {
+    return this.http.post<any>("http://localhost:8080/grade/student/", grade).toPromise().then(response => {
+      console.log(response);
+    });
   }
 
   getGrade(username: string, labId: number): Observable<Grade> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-    return this.http.get<Grade>("http://localhost:8080/grade/student/" + username + "/" + labId, myHeaders);
+    return this.http.get<Grade>("http://localhost:8080/grade/student/" + username + "/" + labId);
   }
 
   getName(username: string | null): Observable<Person> {
-    const myHeaders = {
-      headers: new HttpHeaders({
-        'Access-Control-Allow-Origin': 'http://localhost:4200',
-        "Access-Control-Allow-Methods": "GET, PUT, POST, DELETE, OPTIONS"
-      })
-    };
-    return this.http.get<Person>("http://localhost:8080/user/" + username, myHeaders)
+    return this.http.get<Person>("http://localhost:8080/user/" + username)
   }
 }

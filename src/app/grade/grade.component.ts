@@ -1,7 +1,7 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {Demo} from "../lab/lab";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import { Component, Inject, OnInit } from '@angular/core';
+import { Demo } from "../lab/lab";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-grade',
@@ -15,7 +15,7 @@ export class GradeComponent implements OnInit {
   gradeComment: string;
 
   constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<GradeComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: {demo: Demo}) { }
+              @Inject(MAT_DIALOG_DATA) public data: { demo: Demo }) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -24,6 +24,7 @@ export class GradeComponent implements OnInit {
     });
   }
 
+  /** Sends grade and comment back to lab component**/
   submitGrade() {
     this.grade = this.loginForm.controls.grade.value;
     this.gradeComment = this.loginForm.controls.gradeComment.value;

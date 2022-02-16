@@ -26,6 +26,7 @@ export class Demo {
     position: number;
     lab: Lab;
     person: Person;
+    seat: number;
 }
 
 export class Person {
