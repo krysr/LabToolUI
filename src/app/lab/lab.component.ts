@@ -73,6 +73,7 @@ export class LabComponent implements OnInit {
     });
   }
 
+  /** Gets user first name **/
   getName() {
     this.labService.getName(this.username).subscribe((data) => {
       this.user = data;
@@ -80,6 +81,7 @@ export class LabComponent implements OnInit {
     })
   }
 
+  /** Gets today's date **/
   getDate() {
     switch (new Date().getDay()) {
       case 1:
@@ -109,6 +111,7 @@ export class LabComponent implements OnInit {
     this.currentTime = +(this.currentHour.concat(this.currentMinutes.concat(new Date().getMinutes().toString())));
   }
 
+  /** Gets array of today's labs **/
   getTodaysLabs() {
     this.todaysLabs = [];
     this.nextLabs = [];
@@ -120,6 +123,7 @@ export class LabComponent implements OnInit {
     this.getNextLabs();
   }
 
+  /** Gets upcoming lab for the day **/
   getNextLabs() {
     if (this.todaysLabs.length === 0) {
       this.currentLab = new Lab();
@@ -131,11 +135,14 @@ export class LabComponent implements OnInit {
         this.nextLabs.push(element);
         this.nextLabs.sort((n1, n2) => n1.startTime - n2.startTime);
         this.nextLab = this.nextLabs[0];
+      } else {
+        this.currentLab = new Lab();
       }
     });
     this.showQueue();
   }
 
+  /** Joins demonstration queue **/
   demonstrate() {
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
@@ -145,6 +152,7 @@ export class LabComponent implements OnInit {
     });
   }
 
+  /** Leaves demonstration queue **/
   stopDemo(row: Demo) {
     row.demo = 'no';
     this.isDemo = false;
@@ -152,7 +160,10 @@ export class LabComponent implements OnInit {
     });
   }
 
+  /** Displays demonstration queue **/
   showQueue() {
+     console.log("in queue");
+     console.log(this.isDemo);
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "seat", "instructorBtn", "leaveBtn", "liveDemo", "exit"];
@@ -165,6 +176,8 @@ export class LabComponent implements OnInit {
             this.demoTable = new MatTableDataSource(this.demoQueue);
             this.demoTable.sort = this.sort;
             this.isFirstPos = this.demoTable.data.find(x => x.demo === 'yes');
+          } else {
+            this.isDemo = false;
           }
           if (demo.person.dsUsername === this.username && demo.demo === "yes" && this.joinQueue === undefined) {
             this.joinQueue = new Date();
@@ -176,6 +189,7 @@ export class LabComponent implements OnInit {
     }
   }
 
+  /** Toggle for queue (admin interface) **/
   toggleTable(showQueue: boolean) {
     if (showQueue) {
       this.interHandle = setInterval(() => {
@@ -188,6 +202,7 @@ export class LabComponent implements OnInit {
     }
   }
 
+  /** Adds students grade **/
   addGrade(row: Demo) {
     this.demoEndTime = new Date();
     this.currentStudentDemo = row;
@@ -219,17 +234,22 @@ export class LabComponent implements OnInit {
     this.addStats(row);
   }
 
+  /** Gets grade to display it **/
   getGrade(username: string | null) {
     // @ts-ignore
     this.labService.getGrade(username, this.currentLab.labId).subscribe((data) => {
-      if (!!data && new Date(data.gradeDate).getDate() === new Date().getDate() && new Date(data.gradeDate).getMonth() === new Date().getMonth()) {
-        this.isGradeSet = true;
-        this.studentGrades = data;
-        this.isDemo = false;
-      }
+      console.log(data.length + "in get grade");
+      data.forEach(mark => {
+        if(new Date(mark.gradeDate).getDate() === new Date().getDate() && new Date(mark.gradeDate).getMonth() === new Date().getMonth()) {
+          this.isGradeSet = true;
+          this.studentGrades = mark;
+          this.isDemo = false;
+        }
+        })
     });
   }
 
+  /** Accepts student from queue **/
   acceptStudent(row: Demo) {
     this.demoStartTime = new Date();
     this.waitingTime = (new Date).getTime();
@@ -240,6 +260,7 @@ export class LabComponent implements OnInit {
     });
   }
 
+  /** Adds to statistics **/
   addStats(demo: Demo) {
     let stats: Statistic = new Statistic;
     stats.demo = demo;
@@ -259,6 +280,7 @@ export class LabComponent implements OnInit {
 
   }
 
+  /** Switches between student and demonstrator interfaces **/
   switchInterface(role: string) {
     localStorage.setItem('role', role);
     clearInterval(this.interHandle);
@@ -272,6 +294,7 @@ export class LabComponent implements OnInit {
     });
   }
 
+  /** Sorts labs by time **/
   sortLabs(labs: Lab[]) {
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     labs.sort((lab1, lab2) => (days.indexOf(lab1.labDay) < days.indexOf(lab2.labDay) ? -1 : 1));
@@ -282,6 +305,7 @@ export class LabComponent implements OnInit {
     return lab1 < lab2 ? -1 : 1;
   }
 
+  /** Logs user out **/
   logout() {
     localStorage.clear();
     this.router.navigate(["/login"]);

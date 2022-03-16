@@ -5,7 +5,7 @@
 
   <div class="header">
     <div class="logo-box">
-    <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="85vh" class="logo">
+      <img src="../../assets/logogrey.png" alt="Lab Assistant" width="80vw" height="85vh" class="logo">
     </div>
     <span class="user"> Hello, {{firstName}}!</span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -35,7 +35,7 @@
       <div *ngIf="currentLab !== undefined && currentLab.labDay">
         <label> {{currentLab.labClass.classId}}<br></label>
         <label><b> {{currentLab.labClass.className}} </b><br></label>
-        <label> until {{currentLab.endTime}}</label>
+        <label> until {{currentLab.endTime}} Room: {{currentLab.room}}</label>
       </div>
       <div *ngIf="currentLab === undefined || currentLab.labId === undefined" class="no-lab">
         <label>No lab currently running.<br></label>
@@ -50,7 +50,7 @@
     <div class="next-lab-obj" *ngIf="nextLab != undefined">
       <label> {{nextLab.labClass.classId}}<br></label>
       <label><b> {{nextLab.labClass.className}}</b><br></label>
-      <label> from {{nextLab.startTime}}</label>
+      <label> from {{nextLab.startTime}} Room: {{nextLab.room}}</label>
     </div>
     <div *ngIf="nextLab === undefined" class="no-lab">
       You don't have any more lab today.
@@ -58,47 +58,47 @@
   </mat-card>
 
   <!------------------- LAB LIST CARD ------------------>
-    <mat-card class="lab-list">
-          <span class="label-lab"> Your labs: </span>
-  <div class="lab-table">
-  <table mat-table [dataSource]="labTable" class="mat-elevation-z8">
-  <ng-container matColumnDef="classId">
-    <th mat-header-cell *matHeaderCellDef> Class ID </th>
-    <td mat-cell *matCellDef="let element"> {{element.labClass.classId}} </td>
-  </ng-container>
+  <mat-card class="lab-list">
+    <span class="label-lab"> Your labs: </span>
+    <div class="lab-table">
+      <table mat-table [dataSource]="labTable" class="mat-elevation-z8">
+        <ng-container matColumnDef="classId">
+          <th mat-header-cell *matHeaderCellDef> Class ID</th>
+          <td mat-cell *matCellDef="let element"> {{element.labClass.classId}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="className">
-      <th mat-header-cell *matHeaderCellDef> Class Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.labClass.className}} </td>
-    </ng-container>
+        <ng-container matColumnDef="className">
+          <th mat-header-cell *matHeaderCellDef> Class Name</th>
+          <td mat-cell *matCellDef="let element"> {{element.labClass.className}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="labDay">
-      <th mat-header-cell *matHeaderCellDef> Day </th>
-      <td mat-cell *matCellDef="let element"> {{element.labDay}} </td>
-    </ng-container>
+        <ng-container matColumnDef="labDay">
+          <th mat-header-cell *matHeaderCellDef> Day</th>
+          <td mat-cell *matCellDef="let element"> {{element.labDay}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="startTime">
-      <th mat-header-cell *matHeaderCellDef> Start Time </th>
-      <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
-    </ng-container>
+        <ng-container matColumnDef="startTime">
+          <th mat-header-cell *matHeaderCellDef> Start Time</th>
+          <td mat-cell *matCellDef="let element"> {{element.startTime}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="endTime">
-      <th mat-header-cell *matHeaderCellDef> End Time </th>
-      <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
-    </ng-container>
+        <ng-container matColumnDef="endTime">
+          <th mat-header-cell *matHeaderCellDef> End Time</th>
+          <td mat-cell *matCellDef="let element"> {{element.endTime}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="room">
-      <th mat-header-cell *matHeaderCellDef> Room </th>
-      <td mat-cell *matCellDef="let element"> {{element.room}} </td>
-    </ng-container>
+        <ng-container matColumnDef="room">
+          <th mat-header-cell *matHeaderCellDef> Room</th>
+          <td mat-cell *matCellDef="let element"> {{element.room}} </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="labListColumns"></tr>
-    <tr mat-row *matRowDef="let row; let even = even;
+        <tr mat-header-row *matHeaderRowDef="labListColumns"></tr>
+        <tr mat-row *matRowDef="let row; let even = even;
               columns: labListColumns;"
-             [ngClass]="{gray: even}"> </tr>
-  </table>
-  </div>
-        </mat-card>
+            [ngClass]="{gray: even}"></tr>
+      </table>
+    </div>
+  </mat-card>
 
   <!------------------------ QUEUE CARD ------------------->
 
@@ -135,7 +135,9 @@
     </ng-container>
     <ng-container matColumnDef="seat">
       <th mat-header-cell *matHeaderCellDef>Seat</th>
-      <td mat-cell *matCellDef="let user"> <span *ngIf="(role === 'student' && username === user.person.dsUsername) || role !== 'student'">{{user.seat}} </span> </td>
+      <td mat-cell *matCellDef="let user"><span
+        *ngIf="(role === 'student' && username === user.person.dsUsername) || role !== 'student'">{{user.seat}} </span>
+      </td>
     </ng-container>
     <ng-container matColumnDef="instructorBtn">
       <th mat-header-cell *matHeaderCellDef></th>
@@ -186,7 +188,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; let even = even;
               columns: displayedColumns;"
-        [ngClass]="{gray: even}"> </tr>
+        [ngClass]="{gray: even}"></tr>
   </table>
 </div>
 </body>

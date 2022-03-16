@@ -44,8 +44,9 @@ export class LabService {
     });
   }
 
-  getGrade(username: string, labId: number): Observable<Grade> {
-    return this.http.get<Grade>("http://localhost:8080/grade/student/" + username + "/" + labId);
+  getGrade(username: string, labId: number): Observable<Grade[]> {
+    console.log("getting grade");
+    return this.http.get<Grade[]>("http://localhost:8080/grade/student/" + username + "/" + labId);
   }
 
   getName(username: string | null): Observable<Person> {

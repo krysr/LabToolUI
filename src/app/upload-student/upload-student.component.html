@@ -18,7 +18,7 @@
   </div>
   <div class="my-tabs">
     <mat-tab-group [selectedIndex]="3">
-      <!--ADD LAB -->
+      <!--------------------ADD LAB ------------------------->
       <mat-tab label="Add lab">
         <form [formGroup]="labForm" class="form">
           <mat-form-field appearance="fill">
@@ -56,7 +56,7 @@
           <button type="button" mat-button mat-raised-button class="my-btn" (click)="labOnSubmit()">ADD</button>
         </form>
       </mat-tab>
-      <!--  ADD STUDENT/DEMONSTRATOR-->
+      <!---------------  ADD STUDENT/DEMONSTRATOR---------------------------->
 
       <mat-tab label="Add student/demonstrator to lab">
         <mat-accordion>
@@ -131,9 +131,9 @@
         </mat-accordion>
       </mat-tab>
 
-      <!--SHOW STATISTICS -->
+      <!-------------------------------SHOW STATISTICS ------------------------------------->
 
-      <mat-tab label="Statistic">
+      <mat-tab label="Statistics">
         <mat-form-field appearance="fill">
           <mat-label>Select lab</mat-label>
           <mat-select required>
