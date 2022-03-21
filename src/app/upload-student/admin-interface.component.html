@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="my-tabs">
-    <mat-tab-group [selectedIndex]="3">
+    <mat-tab-group [selectedIndex]="2">
       <!--------------------ADD LAB ------------------------->
       <mat-tab label="Add lab">
         <form [formGroup]="labForm" class="form">
@@ -137,7 +137,7 @@
         <mat-form-field appearance="fill">
           <mat-label>Select lab</mat-label>
           <mat-select required>
-            <mat-option (onSelectionChange)="filterLabs(lab, $event)" *ngFor="let lab of labList" [value]="lab">
+            <mat-option (onSelectionChange)="filterLabs(lab, $event, 1)" *ngFor="let lab of labList" [value]="lab">
               {{lab.labClass.classId}}
               {{lab.labClass.className}}
               {{lab.labDay}}
@@ -189,8 +189,8 @@
             <tr mat-row *matRowDef="let row; let even = even;
               columns: displayedColumns;"
                 [ngClass]="{gray: even}"> </tr>
-            <tr mat-footer-row *matFooterRowDef="displayedColumns" class="nettoRow"></tr>
-            <tr mat-footer-row *matFooterRowDef="avgDemoFooter" class="nettoRow"></tr>
+            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            <tr mat-footer-row *matFooterRowDef="avgDemoFooter"></tr>
           </table>
         </div>
 
@@ -199,6 +199,62 @@
         </button>
 
       </mat-tab>
+      <!-------------------------------STUDENTS GRADES ------------------------------------->
+      <mat-tab label="Grades">
+        <mat-form-field appearance="fill">
+          <mat-label>Select lab</mat-label>
+          <mat-select required>
+            <mat-option (onSelectionChange)="filterLabs(lab, $event, 2)" *ngFor="let lab of labList" [value]="lab">
+              {{lab.labClass.classId}}
+              {{lab.labClass.className}}
+              {{lab.labDay}}
+              {{lab.startTime}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Select date</mat-label>
+          <mat-select required>
+            <mat-option (onSelectionChange)="getStudentsGrades(date, $event)" *ngFor="let date of gradeDate" [value]="date">
+              {{date}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="stat-table" *ngIf="gradeTable != null">
+          <table mat-table [dataSource]="gradeTable" matSort matSortDirection="asc" multiTemplateDataRows>
+            <ng-container matColumnDef="FirstName">
+              <th mat-header-cell *matHeaderCellDef> First Name</th>
+              <td mat-cell
+                  *matCellDef="let grades"> {{grades.demo.person.firstName}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="LastName">
+              <th mat-header-cell *matHeaderCellDef> Last Name</th>
+              <td mat-cell *matCellDef="let grades"> {{grades.demo.person.lastName}} </td>
+              <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="Grade">
+              <th mat-header-cell *matHeaderCellDef>Grade</th>
+              <td mat-cell *matCellDef="let grades"> {{grades.grade}} </td>
+              <td mat-footer-cell *matFooterCellDef ></td>
+            </ng-container>
+            <ng-container matColumnDef="Comment">
+              <th mat-header-cell *matHeaderCellDef>Comment</th>
+              <td mat-cell *matCellDef="let grades"> {{grades.gradeComment}} </td>
+              <td mat-footer-cell *matFooterCellDef ></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="gradeCol"></tr>
+            <tr mat-row *matRowDef="let row; let even = even;
+              columns: gradeCol;"
+                [ngClass]="{gray: even}"> </tr>
+            <tr mat-footer-row *matFooterRowDef="gradeCol" class="nettoRow"></tr>
+          </table>
+        </div>
+
+      </mat-tab>
+
     </mat-tab-group>
   </div>
 

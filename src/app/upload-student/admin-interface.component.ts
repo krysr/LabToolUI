@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import * as XLSX from 'ts-xlsx';
-import {Class, Lab} from "../lab/lab";
+import {Class, Lab, Grade} from "../lab/lab";
 import {LabService} from "../lab/lab.service";
-import {UploadStudentService} from "./upload-student.service";
+import {AdminInterfaceService} from "./admin-interface.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatSort} from "@angular/material/sort";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -14,16 +14,17 @@ import {Label, Color} from "ng2-charts";
 
 @Component({
   selector: 'app-upload-student',
-  templateUrl: './upload-student.component.html',
-  styleUrls: ['./upload-student.component.css']
+  templateUrl: './admin-interface.component.html',
+  styleUrls: ['./admin-interface.component.css']
 })
-export class UploadStudentComponent implements OnInit {
+export class AdminInterfaceComponent implements OnInit {
 
   @Input() selectedIndex: number | null;
 
   fileToUpload: File;
   arrayBuffer: any;
   displayedColumns: string[];
+  gradeCol: string[];
   avgDemoFooter: string[];
   labForm: FormGroup;
   studentForm: FormGroup;
@@ -32,10 +33,13 @@ export class UploadStudentComponent implements OnInit {
   class: Class;
   labList: Lab[]
   statTable: MatTableDataSource<StatCollection>;
+  gradeTable: MatTableDataSource<Grade>;
   stats: Statistic[];
+  grades: Grade[];
   filteredStats: Statistic[];
   displayStats: StatCollection[];
   labDate: string[];
+  gradeDate: string[];
   avgWaitStr: string;
   avgDemoStr: string;
   firstName: string;
@@ -147,7 +151,7 @@ export class UploadStudentComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private uploadStudentService: UploadStudentService,
+  constructor(private adminInterfaceService: AdminInterfaceService,
               private formBuilder: FormBuilder,
               private labService: LabService,
               private router: Router,
@@ -215,7 +219,7 @@ export class UploadStudentComponent implements OnInit {
       let final_result = result.split('\n');
       this.lab = this.studentForm.controls.lab.value;
       if (!!result) {
-        this.uploadStudentService.uploadList(final_result, this.lab).then(
+        this.adminInterfaceService.uploadList(final_result, this.lab).then(
           res => {
             this.snackBar.open('Upload successful!', 'Close', {
               duration: 10000,
@@ -233,7 +237,7 @@ export class UploadStudentComponent implements OnInit {
   formUpload(type: string) {
     this.lab = this.studentForm.controls.lab.value;
     this.email = this.studentForm.controls.email.value;
-    this.uploadStudentService.assignToLab(this.lab, this.email, type).then(
+    this.adminInterfaceService.assignToLab(this.lab, this.email, type).then(
       res => {
         this.snackBar.open('Upload successful!', 'Close', {
           duration: 10000,
@@ -257,7 +261,7 @@ export class UploadStudentComponent implements OnInit {
     this.lab.room = this.labForm.controls.room.value;
     this.lab.labClass = this.class;
 
-    this.uploadStudentService.addNewLab(this.lab, this.class, username).then(res => {
+    this.adminInterfaceService.addNewLab(this.lab, this.class, username).then(res => {
       this.snackBar.open('Lab created!', 'Close', {
         duration: 10000,
         panelClass: ['success-snackbar']
@@ -265,7 +269,7 @@ export class UploadStudentComponent implements OnInit {
     });
   }
 
-  filterLabs(lab: Lab, event: any) {
+  filterLabs(lab: Lab, event: any, choice: number) {
     if (event.isUserInput) {
       this.demoGraph = new Map();
       this.demoGraph.set(0, 0);
@@ -277,13 +281,27 @@ export class UploadStudentComponent implements OnInit {
       this.statTable = new MatTableDataSource(this.displayStats);
       this.stats = [];
       this.labDate = [];
-      this.uploadStudentService.getStats().subscribe((data) => {
-        this.stats = data.filter(obj => obj.demo.lab.labId === lab.labId);
-        this.stats.forEach(obj => {
-          this.labDate.push(new Date(obj.date).toDateString() + " " + obj.demo.lab.startTime);
-          this.labDate = this.labDate.filter((v, i, a) => a.indexOf(v) === i);
+      this.gradeDate = [];
+      if (1) {
+        this.adminInterfaceService.getStats().subscribe((data) => {
+          this.stats = data.filter(obj => obj.demo.lab.labId === lab.labId);
+          this.stats.forEach(obj => {
+            this.labDate.push(new Date(obj.date).toDateString() + " " + obj.demo.lab.startTime);
+            this.labDate = this.labDate.filter((v, i, a) => a.indexOf(v) === i);
+          })
         })
-      })
+      }
+      if (2) {
+        this.grades = [];
+        this.adminInterfaceService.getGrades().subscribe((data) => {
+          this.grades = data.filter(obj => obj.demo.lab.labId === lab.labId);
+          this.grades.forEach(obj => {
+            this.gradeDate.push(new Date(obj.gradeDate).toDateString() + " " + obj.demo.lab.startTime);
+            this.gradeDate = this.gradeDate.filter((v, i, a) => a.indexOf(v) === i);
+          })
+        })
+      }
+
     }
   }
 
@@ -380,6 +398,16 @@ export class UploadStudentComponent implements OnInit {
 
   showGraph(graph: boolean) {
     this.isGraph = graph;
+  }
+
+  getStudentsGrades(date: string, event: any) {
+
+    if (event.isUserInput) {
+      this.grades = this.grades.filter(obj => new Date(obj.gradeDate).toDateString() === date.slice(0, 15));
+      this.gradeCol = ["FirstName", "LastName", "Grade", "Comment"];
+      this.gradeTable = new MatTableDataSource(this.grades);
+      this.gradeTable.sort = this.sort;
+    }
   }
 
   logout() {

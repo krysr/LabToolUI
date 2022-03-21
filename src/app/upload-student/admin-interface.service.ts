@@ -1,5 +1,5 @@
 import { Observable } from "rxjs";
-import { Class, Lab } from "../lab/lab";
+import {Class, Grade, Lab} from "../lab/lab";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Statistic } from "../statistic/statistic";
@@ -7,7 +7,7 @@ import { Statistic } from "../statistic/statistic";
 @Injectable({
   providedIn: 'root'
 })
-export class UploadStudentService {
+export class AdminInterfaceService {
   username: string | null;
 
   constructor(private http: HttpClient) {
@@ -40,5 +40,9 @@ export class UploadStudentService {
 
   getStats(): Observable<Statistic[]> {
     return this.http.get<Statistic[]>("http://localhost:8080/stats/");
+  }
+
+  getGrades(): Observable<Grade[]> {
+    return this.http.get<Grade[]>("http://localhost:8080/grade/gradeslist/");
   }
 }
