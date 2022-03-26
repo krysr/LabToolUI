@@ -46,7 +46,7 @@ export class LabComponent implements OnInit {
   demoEndTime: Date;
   waitingTime: number;
   joinQueue: Date;
-  interHandle: any;
+  interval: any;
   firstName: string;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -66,7 +66,7 @@ export class LabComponent implements OnInit {
       this.labTable = new MatTableDataSource(this.labs);
       this.sortLabs(this.labs);
       this.getName();
-      this.interHandle = setInterval(() => {
+      this.interval = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
       }, 2000);
@@ -162,8 +162,6 @@ export class LabComponent implements OnInit {
 
   /** Displays demonstration queue **/
   showQueue() {
-     console.log("in queue");
-     console.log(this.isDemo);
     // @ts-ignore
     this.role = localStorage.getItem('role').toString();
     this.displayedColumns = ["num", "person.firstName", "person.lastName", "seat", "instructorBtn", "leaveBtn", "liveDemo", "exit"];
@@ -171,7 +169,8 @@ export class LabComponent implements OnInit {
       this.labService.getQueue(this.currentLab).subscribe((data) => {
         data.forEach(demo => {
           this.demoQueue = data.filter(obj => obj.demo !== 'done');
-          if (demo.demo !== 'done' && demo.person.dsUsername === localStorage.getItem('username') || this.role === 'lecturer' || this.role === 'demonstrator') {
+          if (demo.demo !== 'done' && demo.person.dsUsername === localStorage.getItem('username')
+            || this.role === 'lecturer' || this.role === 'demonstrator') {
             this.isDemo = true;
             this.demoTable = new MatTableDataSource(this.demoQueue);
             this.demoTable.sort = this.sort;
@@ -192,13 +191,13 @@ export class LabComponent implements OnInit {
   /** Toggle for queue (admin interface) **/
   toggleTable(showQueue: boolean) {
     if (showQueue) {
-      this.interHandle = setInterval(() => {
+      this.interval = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
       }, 1000);
     } else {
       this.isDemo = false;
-      clearInterval(this.interHandle);
+      clearInterval(this.interval);
     }
   }
 
@@ -238,7 +237,6 @@ export class LabComponent implements OnInit {
   getGrade(username: string | null) {
     // @ts-ignore
     this.labService.getGrade(username, this.currentLab.labId).subscribe((data) => {
-      console.log(data.length + "in get grade");
       data.forEach(mark => {
         if(new Date(mark.gradeDate).getDate() === new Date().getDate() && new Date(mark.gradeDate).getMonth() === new Date().getMonth()) {
           this.isGradeSet = true;
@@ -283,11 +281,13 @@ export class LabComponent implements OnInit {
   /** Switches between student and demonstrator interfaces **/
   switchInterface(role: string) {
     localStorage.setItem('role', role);
-    clearInterval(this.interHandle);
+    clearInterval(this.interval);
     this.labService.getLab(role).subscribe((data) => {
       this.labs = data;
       this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
-      this.interHandle = setInterval(() => {
+      this.labTable = new MatTableDataSource(this.labs);
+      //this.sortLabs(this.labs);
+      this.interval = setInterval(() => {
         this.getDate();
         this.getTodaysLabs();
       }, 2000);

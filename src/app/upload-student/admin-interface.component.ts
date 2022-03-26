@@ -315,9 +315,9 @@ export class AdminInterfaceComponent implements OnInit {
       this.getAverage(this.filteredStats);
       this.filteredStats.forEach(key => {
         let myStats = new StatCollection;
-        let formatJoinTime = this.msToTime(new Date(key.joinTime).getTime(), false, 2);
-        let demoTime = this.msToTime(new Date(key.demoEndTime).getTime() - new Date(key.demoStartTime).getTime(), true, 0);
-        let waitingTime = this.msToTime(new Date(key.demoStartTime).getTime() - new Date(key.joinTime).getTime(), true, 1);
+        let formatJoinTime = this.msToString(new Date(key.joinTime).getTime(), false, 2);
+        let demoTime = this.msToString(new Date(key.demoEndTime).getTime() - new Date(key.demoStartTime).getTime(), true, 0);
+        let waitingTime = this.msToString(new Date(key.demoStartTime).getTime() - new Date(key.joinTime).getTime(), true, 1);
         myStats.demo = key.demo;
         myStats.date = key.date;
         myStats.joinTime = formatJoinTime;
@@ -337,11 +337,11 @@ export class AdminInterfaceComponent implements OnInit {
       averageWait += new Date(val.demoStartTime).getTime() - new Date(val.joinTime).getTime();
       averageDemo += new Date(val.demoEndTime).getTime() - new Date(val.demoStartTime).getTime();
     })
-    this.avgWaitStr = this.msToTime(averageWait / filtered.length, false, 2);
-    this.avgDemoStr = this.msToTime(averageDemo / filtered.length, false, 2);
+    this.avgWaitStr = this.msToString(averageWait / filtered.length, false, 2);
+    this.avgDemoStr = this.msToString(averageDemo / filtered.length, false, 2);
   }
  /** Source: https://stackoverflow.com/questions/19700283/how-to-convert-time-in-milliseconds-to-hours-min-sec-format-in-javascript by: Dusht**/
-  msToTime(time: number, forGraph: boolean, option: number) {
+  msToString(time: number, forGraph: boolean, option: number) {
     let seconds = Math.floor((time / 1000) % 60);
     let minutes = Math.floor((time / (1000 * 60)) % 60);
     let hours = Math.floor((time / (1000 * 60 * 60)) % 24);

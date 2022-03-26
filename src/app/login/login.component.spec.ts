@@ -3,26 +3,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoginComponent } from './login.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterTestingModule} from "@angular/router/testing";
-import {HttpClientModule, HttpErrorResponse} from "@angular/common/http";
+import {HttpClientModule} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OverlayModule} from "@angular/cdk/overlay";
 import {LoginService} from "./login.service";
-import {HttpTestingController} from "@angular/common/http/testing";
-import {Observable, of} from "rxjs";
+import {of} from "rxjs";
 import {Login} from "./login";
-import {By} from "@angular/platform-browser";
-
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
-  // let httpMock: HttpTestingController;
   let loginService: LoginService;
-  //let matSnackBarSpy: jasmine.SpyObj<MatSnackBar>;
- // let mockSnackbar = jasmine.createSpyObj(['open']);
+  const snackBarMock = jasmine.createSpyObj(['open']);
+  snackBarMock.open
 
   beforeEach(async () => {
-    //const mockSb = jasmine.createSpyObj('MatSnackBar', ['open']);
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
@@ -32,13 +27,12 @@ describe('LoginComponent', () => {
         OverlayModule
       ],
       declarations: [ LoginComponent ],
-      providers: [MatSnackBar]
-      //providers: [{provide: MatSnackBar, useValue: mockSb}]
+      providers: [
+        {provide: MatSnackBar, useValue: snackBarMock},
+      ],
     })
     .compileComponents();
     loginService = TestBed.get(LoginService);
-   // matSnackBarSpy = TestBed.get<MatSnackBar>(MatSnackBar);
-    // httpMock = TestBed.get(HttpTestingController);
   });
 
   beforeEach(() => {
@@ -51,12 +45,53 @@ describe('LoginComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call onSubmit() method on form submit', () => {
+  it('Initial login form test', () => {
+    const loginFormTestUsername: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[0];
+    const loginFormTestPassword: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[1];
+    const usernameTest = component.loginForm.get('username');
+    const passwordTest = component.loginForm.get('password');
+    expect(loginFormTestUsername.value).toEqual(usernameTest?.value);
+    expect(loginFormTestPassword.value).toEqual(passwordTest?.value);
+    expect('').toEqual(usernameTest?.value);
+    expect('').toEqual(passwordTest?.value);
+  });
+
+  it('Form validators test', () => {
+    const loginFormTestUsername: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[0];
+    const loginFormTestPassword: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[1];
+    const usernameTest = component.loginForm.get('username');
+    const pwTest = component.loginForm.get('password');
+    expect(loginFormTestUsername.value).toEqual(usernameTest?.value);
+    expect(loginFormTestPassword.value).toEqual(pwTest?.value);
+    expect(usernameTest?.errors).not.toBeNull();
+    expect(pwTest?.errors).not.toBeNull();
+    // @ts-ignore
+    expect(usernameTest?.errors.required).toBeTruthy();
+    // @ts-ignore
+    expect(pwTest?.errors.required).toBeTruthy();
+  });
+
+  it('Login form dummy details should work', () => {
+    const loginFormTestUsername: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[0];
+    const loginFormTestPassword: HTMLInputElement = fixture.debugElement.nativeElement.querySelector('#loginForm').querySelectorAll('input')[1];
+    loginFormTestUsername.value = 'abcd1234';
+    loginFormTestPassword.value = 'admin';
+    loginFormTestUsername.dispatchEvent(new Event('input'));
+    loginFormTestPassword.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    // Supply id of your form below formID
-    const getForm = fixture.debugElement.query(By.css('form'));
-    expect(getForm.triggerEventHandler('submit', compiled)).toBeUndefined();
+    fixture.whenStable().then(() => {
+      const usernameTest = component.loginForm.get('username');
+      const pwTest = component.loginForm.get('password');
+      expect(loginFormTestUsername.value).toEqual(usernameTest?.value);
+      expect(loginFormTestPassword.value).toEqual(pwTest?.value);
+      expect(usernameTest?.errors).toBeNull();
+      expect(pwTest?.errors).toBeNull();
+    })
+  });
+
+  it('should not open snackbar', () => {
+    component.onSubmit();
+   expect(snackBarMock.open.calls.count()).toEqual(0);
   });
 
   it('should make findLogin() service call to backend', () => {
@@ -64,39 +99,6 @@ describe('LoginComponent', () => {
     spyOn(loginService, 'findLogin').and.returnValue(of( mockLogin)).and.callThrough();
     loginService.findLogin(mockLogin);
     expect(loginService.findLogin).toHaveBeenCalled();
-    //expect(matSnackBarSpy.open).toHaveBeenCalled();
-  });
-
-  xit('should open snackbar', () => {
-    // const mockSnackbarMock = jasmine.createSpyObj(['open']);
-    // mockSnackbarMock.open
-    // const mockLOgin = new Login();
-    // // spyOn(loginService, 'findLogin');//.and.callThrough()
-    // loginService.findLogin(mockLOgin);
-    // // spyOn(mockSnackbarMock,"open").and.callThrough();
-    // // component.ngOnInit();
-    // expect(mockSnackbarMock.open).toHaveBeenCalled();
-    const mockLOgin = new Login();
-    const error = new HttpErrorResponse({error: 'Some error'});
-
-    component.ngOnInit();
-    loginService.findLogin(mockLOgin);
-
-    //expect(matSnackBarSpy.open).toHaveBeenCalled();
-  });
-
-  xit('handleErrors should open the snacker', () => {
-   // spyOn(loginService, 'findLogin').and.callThrough();
-    var contactsServiceMock = jasmine.createSpyObj(
-      "LoginService", ["findLogin"]);
-
-    contactsServiceMock.findLogin.and.returnValue(
-      null);
-    spyOn(component.snackBar, 'open').and.callThrough();
-
-
-    //component.handleErrors({message: 'error'} as any);
-    expect(component.snackBar.open).toHaveBeenCalled();
   });
 
 });
