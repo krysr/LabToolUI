@@ -46,8 +46,8 @@ export class AdminInterfaceComponent implements OnInit {
   isGraph: boolean;
   demoGraph: Map<number, number> = new Map();
   waitGraph: Map<number, number> = new Map();
-
-  // Graph data below
+  lineChartLegend = false;
+  lineChartType: ChartType = 'line';
 
   /** Queue graph **/
   waitLineChartData: ChartDataSets[] = [
@@ -144,10 +144,6 @@ export class AdminInterfaceComponent implements OnInit {
     },
   ];
 
-  lineChartLegend = false;
-  lineChartPlugins = [];
-  lineChartType: ChartType = 'line';
-
 
   @ViewChild(MatSort) sort: MatSort;
 
@@ -164,9 +160,9 @@ export class AdminInterfaceComponent implements OnInit {
     })
     this.getLabs();
     this.labForm = this.formBuilder.group({
-      labDay: ['', Validators.required],
       classId: ['', Validators.required],
       className: ['', Validators.required],
+      labDay: ['', Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       room: ['', Validators.required],
@@ -178,6 +174,7 @@ export class AdminInterfaceComponent implements OnInit {
     })
   }
 
+  /** Gets all labs **/
   getLabs(): void {
     this.labService.getLab('lecturer').subscribe((data) => {
       this.labList = data;
@@ -185,12 +182,14 @@ export class AdminInterfaceComponent implements OnInit {
     });
   }
 
+  /** Sorts labs by day **/
   sortLabs(labs: Lab[]) {
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
     labs.sort((lab1, lab2) => (days.indexOf(lab1.labDay) < days.indexOf(lab2.labDay) ? -1 : 1));
     labs.sort((lab1, lab2) => lab1.labDay !== lab2.labDay ? 1 : this.sortByTime(lab1.startTime, lab2.startTime));
   }
 
+  /** Sorts labs by time **/
   sortByTime(lab1: number, lab2: number) {
     return lab1 < lab2 ? -1 : 1;
   }
@@ -330,6 +329,7 @@ export class AdminInterfaceComponent implements OnInit {
     }
   }
 
+  /** Calculates stats averages **/
   getAverage(filtered: Statistic[]) {
     let averageWait: number = 0;
     let averageDemo: number = 0;

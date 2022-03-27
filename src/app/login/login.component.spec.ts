@@ -10,6 +10,7 @@ import {LoginService} from "./login.service";
 import {of} from "rxjs";
 import {Login} from "./login";
 
+/*** Some of these tests have been written using Sai Kumar Korthivada's article. Source: https://medium.com/javascript-frameworks/unit-testing-using-reactive-forms-in-angular-66b9fc4ee429       ***/
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;

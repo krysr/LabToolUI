@@ -25,14 +25,15 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/CS408'),
+      dir: require('path').join(__dirname, './coverage/LabToolUI'),
       subdir: '.',
       reporters: [
         { type: 'html' },
         { type: 'text-summary' }
       ]
     },
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['progress', 'kjhtml', 'coverage'],
+    preprocessors: {'**/*.js': ['coverage']},
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

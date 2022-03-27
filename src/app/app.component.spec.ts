@@ -19,7 +19,6 @@ describe('AppComponent', () => {
   xit(`should have as title 'CS408'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    //expect(app.title).toEqual('LabToolUI');
   });
 
   xit('should render title', () => {

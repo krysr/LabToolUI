@@ -286,6 +286,8 @@ export class LabComponent implements OnInit {
       this.labs = data;
       this.labs.sort((a, b) => (a.labDay < b.labDay ? -1 : 1));
       this.labTable = new MatTableDataSource(this.labs);
+      this.currentLab = new Lab();
+      this.nextLab = new Lab();
       //this.sortLabs(this.labs);
       this.interval = setInterval(() => {
         this.getDate();

@@ -20,7 +20,7 @@
     <mat-tab-group [selectedIndex]="2">
       <!--------------------ADD LAB ------------------------->
       <mat-tab label="Add lab">
-        <form [formGroup]="labForm" class="form">
+        <form [formGroup]="labForm" class="form" id="labForm">
           <mat-form-field appearance="fill">
             <mat-label>Class ID</mat-label>
             <input matInput formControlName="classId" placeholder="Example: CS407" required>
@@ -31,7 +31,7 @@
           </mat-form-field>
           <mat-form-field appearance="fill">
             <mat-label>Lab day</mat-label>
-            <mat-select placeholder="Day" formControlName="labDay">
+            <mat-select placeholder="Day" formControlName="labDay" ngDefaultControl>
               <mat-option value="Monday">Monday</mat-option>
               <mat-option value="Tuesday">Tuesday</mat-option>
               <mat-option value="Wednesday">Wednesday</mat-option>
@@ -68,10 +68,10 @@
             </mat-expansion-panel-header>
             <p>Please select a lab to add a student to and upload the student(s) email using the file or input
               option.</p>
-            <form [formGroup]="studentForm" class="form">
+            <form [formGroup]="studentForm" class="form" id="studentForm">
               <mat-form-field appearance="fill">
                 <mat-label>Select lab</mat-label>
-                <mat-select formControlName="lab" required>
+                <mat-select ngDefaultControl formControlName="lab" required>
                   <mat-option *ngFor="let lab of labList" [value]="lab">
                     {{lab.labClass.classId}}
                     {{lab.labClass.className}}
@@ -107,10 +107,10 @@
                 Assign Demonstrator(s) to a lab
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <form [formGroup]="studentForm" class="form">
+            <form [formGroup]="studentForm" class="form" id="studentForm2">
               <mat-form-field appearance="fill">
                 <mat-label>Select lab</mat-label>
-                <mat-select formControlName="lab" required>
+                <mat-select ngDefaultControl formControlName="lab" required>
                   <mat-option *ngFor="let lab of labList" [value]="lab">
                     {{lab.labClass.classId}}
                     {{lab.labClass.className}}
@@ -272,8 +272,7 @@
             [options]="demoLineChartOptions"
             [colors]="demoLineChartColors"
             [legend]="lineChartLegend"
-            [chartType]="lineChartType"
-            [plugins]="lineChartPlugins">
+            [chartType]="lineChartType">
     </canvas>
     </div>
     <div class="graph2">
@@ -283,8 +282,7 @@
             [options]="waitLineChartOptions"
             [colors]="waitLineChartColors"
             [legend]="lineChartLegend"
-            [chartType]="lineChartType"
-            [plugins]="lineChartPlugins">
+            [chartType]="lineChartType">
     </canvas>
     </div>
   </div>

@@ -49,13 +49,6 @@ button {
   font-size: 25px;
   font-weight: bold;
   color: #fff;
-  /*line-height: 1.2;*/
-  /*text-transform: uppercase;*/
-
-  /*display: -webkit-box;*/
-  /*display: -webkit-flex;*/
-  /*display: -moz-box;*/
-  /*display: -ms-flexbox;*/
   display: flex;
   justify-content: center;
   align-items: center;
@@ -105,16 +98,6 @@ textarea {
 textarea:focus, input:focus {
   border-color: transparent !important;
 }
-
-input:focus::-webkit-input-placeholder { color:transparent; }
-input:focus:-moz-placeholder { color:transparent; }
-input:focus::-moz-placeholder { color:transparent; }
-input:focus:-ms-input-placeholder { color:transparent; }
-
-input::-webkit-input-placeholder { color: #adadad;}
-input:-moz-placeholder { color: #adadad;}
-input::-moz-placeholder { color: #adadad;}
-input:-ms-input-placeholder { color: #adadad;}
 
 .input-label {
   font-family: Helvetica, sans-serif;

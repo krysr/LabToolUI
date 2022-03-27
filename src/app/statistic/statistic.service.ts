@@ -11,6 +11,7 @@ export class StatisticService {
   constructor(private http: HttpClient) {
   }
 
+  /** Adds students stats **/
   addStats(stat: Statistic, role: string): Observable<Statistic[]> {
     return this.http.post<Statistic[]>("http://localhost:8080/stats/" + role, stat);
   }

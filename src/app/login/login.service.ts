@@ -14,6 +14,7 @@ export class LoginService {
     this.loginUrl = 'http://localhost:8080/'
   }
 
+  /** fetches login details if they match **/
   public findLogin(login: Login): Observable<Login> {
     this.auth64 = btoa(login.dsUsername + ':' + login.password)
     const myHeaders = { headers: new HttpHeaders( { 'Access-Control-Allow-Origin': 'http://localhost:4200',

@@ -13,7 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class LoginComponent implements OnInit {
 
-  fieldTextType: boolean;
+  showText: boolean;
   login: Login;
   firstName: string;
   loginForm: FormGroup;
@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit {
     this.login = new Login();
   }
 
+  /** Submit form and logs in if details are correct **/
   onSubmit(): void {
     this.login.dsUsername = this.loginForm.controls.username.value;
     this.login.password = this.loginForm.controls.password.value;
@@ -52,7 +53,8 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  toggleFieldTextType() {
-    this.fieldTextType = !this.fieldTextType;
+  /** SHows or hides password **/
+  showHidePw() {
+    this.showText = !this.showText;
   }
 }

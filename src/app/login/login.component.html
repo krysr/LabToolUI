@@ -12,14 +12,14 @@
       <span class="input-label">Password</span>
       <div class="password-box">
         <input matInput class="input" id="password" type="password"
-               [type]="fieldTextType ? 'text' : 'password'"
+               [type]="showText ? 'text' : 'password'"
                formControlName="password" placeholder="Type your password" required/>
         <span class="fa fa-fw field-icon toggle-password"
               [ngClass]="{
-                        'fa-eye-slash': !fieldTextType,
-                        'fa-eye': fieldTextType
+                        'fa-eye-slash': !showText,
+                        'fa-eye': showText
                       }"
-              (click)="toggleFieldTextType() "></span>
+              (click)="showHidePw() "></span>
       </div>
     </div>
     <div class="card-login-btn">
